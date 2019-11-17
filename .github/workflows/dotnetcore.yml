@@ -1,0 +1,22 @@
+name: .NET Core
+
+on: [push]
+
+jobs:
+  build_and_test:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core if needed
+      uses: actions/setup-dotnet@v1.2.0
+      with:
+        dotnet-version: 3.0.100
+    - name: Build with dotnet
+      run: dotnet build ./Set5/src/Set5.sln --configuration Release
+    - name: Test with dotnet
+      run: dotnet test ./Set5/src/Set5.sln --configuration Release
