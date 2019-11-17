@@ -34,7 +34,7 @@ namespace Set5.Tests
             var errorMessage = $"SecretMessageValidator failed for:{Environment.NewLine}Kingdom: {kingdom}{Environment.NewLine}Message: {message}";
 
             // Generating output using the function being tested
-            var actual = IsValidSecretMessage(kingdom, message);
+            var actual = SecretMessageAccepted(kingdom, message);
 
             // Comparing values and asserting result
             Assert.AreEqual(expected, actual, errorMessage);

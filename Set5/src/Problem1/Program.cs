@@ -11,20 +11,39 @@ namespace Problem1
             var engine = new Engine.Engine();
 
             // Declaring contestant for the throne
-            engine.AddCompetingKingdom(Kingdoms.Space, "King Shan");
+            engine.AllKingdoms[Kingdoms.Space].IsCompeting = true;
+            // Assign the kings name
+            engine.AllKingdoms[Kingdoms.Space].King = "King Shan";
 
-            // Variable to store input from the user
+            // Variables to store input and output from the user
             string input = string.Empty;
+            string output;
 
             // Keep reading input from the user unit they enter "exit"
-            while (input.ToLower() != "exit")
+            while (!(input = Console.ReadLine().Trim().ToLower()).Contains("exit"))
             {
-                if ((input = Console.ReadLine().ToLower()) == "exit") break;
+                int index;
+                // In case the user wishes to send a message
+                if ((index = input.IndexOf('"')) != -1)
+                {
+                    var recipient = input.Substring(0, index).Trim(new char[] { ' ', ',' });
+                    var messageText = input.Substring(index + 1, input.LastIndexOf('"') - index - 1);
 
-                var output = engine.ProcessInput(input);
+                    if (Enum.TryParse(recipient, true, out Kingdoms recipientKingdom))
+                    {
+                        output = string.Empty;
+                        engine.SendMessage(new Message(Kingdoms.Space, recipientKingdom, messageText));
+                    }
+                    else
+                    {
+                        output = string.Format(Engine.Engine.InvalidKingdomErrorMessage, recipient);
+                    }
+                }
+                else
+                    output = engine.ProcessInput(input);
 
-                if (!string.IsNullOrWhiteSpace(output))
-                    Console.WriteLine(output);
+                Console.WriteLine(output);
+
             }
         }
     }

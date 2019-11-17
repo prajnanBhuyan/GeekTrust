@@ -55,6 +55,8 @@ Give proper credits. This could be a link to any repo which inspired you to buil
 ## Assumptions:
 1. The other kingdoms simply ignore any future messages sent to them once they recieve their first message. This behavious can be easily changed so as to mimic kingdoms getting offended on not having their emblem in the message and breaking off alliances that were already in place.
 
+2. Set a limit for the ballot rounds so that in an unfortunate event we don't go on going forever.
+
 ## License
 A short snippet describing the license (MIT, Apache etc)
 

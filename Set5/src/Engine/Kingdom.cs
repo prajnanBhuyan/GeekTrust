@@ -17,15 +17,14 @@ namespace Engine
 
     public class Kingdom
     {
-        private readonly string rulerName;
         private readonly Kingdoms kingdomType;
 
+        public string King;
+        public readonly string Emblem;
+
         public string Name { get { return kingdomType.ToString(); } }
-        public string Ruler { get { return string.IsNullOrWhiteSpace(rulerName) ? "ruler" : rulerName; } }
+        public bool IsCompeting { get; set; }
         public List<Kingdoms> Allies { get; }
-        public string Emblem { get; }
-        public bool HasRightToRule { get { return Allies.Count >= 3; } }
-        public bool IsKingNameKnown { get { return !string.IsNullOrWhiteSpace(rulerName); } }
 
         public Kingdom(Kingdoms kingdom)
         {
@@ -37,16 +36,9 @@ namespace Engine
         public Kingdom(Kingdoms kingdom, string rulerName)
         {
             this.kingdomType = kingdom;
-            this.rulerName = rulerName;
+            King = rulerName;
             Emblem = Engine.Emblems[(int)kingdom];
             Allies = new List<Kingdoms>();
-        }
-
-        public void SendMessage(Kingdoms targetKingdom, string secretMessage)
-        {
-            if (!Allies.Contains(targetKingdom) &&
-                Engine.IsValidSecretMessage(targetKingdom, secretMessage))
-                Allies.Add(targetKingdom);
         }
     }
 }
