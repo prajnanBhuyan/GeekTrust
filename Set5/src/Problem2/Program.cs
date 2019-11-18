@@ -16,7 +16,7 @@ namespace Problem2
             // Keep reading input from the user unit they enter "exit"
             while (!(input = Console.ReadLine().Trim().ToLower()).Contains("exit"))
             {
-                string output;
+                string output = string.Empty;
 
                 if (input.Contains("enter") && input.Contains("kingdoms competing"))
                 {
@@ -34,7 +34,7 @@ namespace Problem2
                     }
 
                     if (noOfCompetitors < Enum.GetValues(typeof(Kingdoms)).Length)
-                        output = engine.FindRulerByBallot();
+                        engine.FindRulerByBallot();
                     else
                         output = Engine.Engine.TooManyCompetingKingdoms;
                 }
