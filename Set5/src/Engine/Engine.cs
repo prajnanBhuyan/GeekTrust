@@ -14,6 +14,7 @@ namespace Engine
         private readonly List<string> listOfMessages;
 
         public readonly Dictionary<Kingdoms, Kingdom> AllKingdoms;
+        public const int RequiredRightToRule = 3;
         public const int MessagesDuringBallot = 6;
         public const int MaxBallotRounds = 100;
         public static readonly string[] Emblems =
@@ -28,6 +29,7 @@ namespace Engine
         public const string InvalidKingdomErrorMessage = "Our messengers couldn't reach '{0}'. Maybe we should try sending messaged just to our neighbouring kingdoms for now.";
         public const string TooManyCompetingKingdoms = "Alas! All the kingdoms wanted the thone for themselves and The High Priest couldn't stop the war.";
         public const string BallotTookTooLong = "Alas! The process took too long the the kings grew weary. The battle could not be avoided.";
+        public const string NoCompetingKingdoms = "Atleast two kingdoms need to be competing to use the ballott system to decide a ruler.";
 
         public Engine()
         {
@@ -99,12 +101,16 @@ namespace Engine
                 AllKingdoms[message.Sender].Allies.Add(message.Recipient);
                 AllKingdoms[message.Recipient].Allies.Add(message.Sender);
             }
+
+
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+        public void FindRulerByRightToRule(Kingdoms kingdom)
+        {
+            if (AllKingdoms[kingdom].Allies.Count >= RequiredRightToRule)
+                rulingKingdom = AllKingdoms[kingdom];
+        }
+
         public void FindRulerByBallot()
         {
             // Ballot round
@@ -158,7 +164,12 @@ namespace Engine
                 }
 
                 // Find the kingdom(s) with the most allies
-                var leadingKingdoms = AllKingdoms.Where(kv => kv.Value.Allies.Count == maxAllies);
+                var leadingKingdoms = AllKingdoms.Where(kv => kv.Value.IsCompeting && kv.Value.Allies.Count == maxAllies);
+
+#if DEBUG
+                Console.WriteLine($"MaxAllies: {maxAllies}");
+                Console.WriteLine($"leadingKingdoms: {string.Join(", ", leadingKingdoms.Select(k => $"{k.Key} ({k.Value.Allies.Count})"))}");
+#endif
 
                 // If there is a tie
                 if (leadingKingdoms.Count() > 1)
@@ -173,11 +184,15 @@ namespace Engine
                 else
                     // ...we declare the winner
                     rulingKingdom = leadingKingdoms.FirstOrDefault().Value;
+
+                // Increment round
+                round++;
             }
 
             if (rulingKingdom == null)
                 Console.WriteLine(BallotTookTooLong);
         }
+
 
         /// <summary>
         /// Checks if the recieving kingdoms animal has been sneakily added into the message.

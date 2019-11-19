@@ -18,6 +18,7 @@ namespace Problem2
             {
                 string output = string.Empty;
 
+                // If user wishes to enter the competing kingdoms
                 if (input.Contains("enter") && input.Contains("kingdoms competing"))
                 {
                     var noOfCompetitors = 0;
@@ -33,11 +34,15 @@ namespace Problem2
                         }
                     }
 
-                    if (noOfCompetitors < Enum.GetValues(typeof(Kingdoms)).Length)
+                    if (noOfCompetitors < 2)
+                        output = Engine.Engine.NoCompetingKingdoms;
+                    else if (noOfCompetitors < Enum.GetValues(typeof(Kingdoms)).Length)
                         engine.FindRulerByBallot();
                     else
                         output = Engine.Engine.TooManyCompetingKingdoms;
                 }
+
+                // Handle all other input
                 else
                     output = engine.ProcessInput(input);
 
