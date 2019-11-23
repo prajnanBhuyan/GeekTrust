@@ -51,17 +51,14 @@ namespace Engine
         public void Execute()
         {
             // Variables to store input and output from the user
-            string input = string.Empty;
+            string input, output;
 
             // Keep reading input from the user unit they enter "exit"
             while (!(input = Console.ReadLine().Trim().ToLower()).Contains("exit"))
             {
-                string output;
-
                 output = ProcessInput(input);
 
                 if (!string.IsNullOrWhiteSpace(output)) Console.WriteLine(output);
-
             }
         }
 
@@ -72,7 +69,7 @@ namespace Engine
         /// <returns>The most suitable output</returns>
         public string ProcessInput(string input)
         {
-            string output = string.Empty;
+            string output = "Invalid input";
 
             // If the user asks who the ruler is
             if (input.Contains("who is the ruler of southeros"))

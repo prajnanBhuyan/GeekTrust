@@ -11,8 +11,8 @@ namespace Problem1
             // Initialize game engine
             var mGameEngine = new GameEngine()
             {
-                CustomInputParser = GoldenCrownParser,
-                CustomInputAction = GoldenCrownAction
+                CustomInputParser = AGoldenCrownParser,
+                CustomInputAction = AGoldenCrownAction
             };
 
             // Give the gorilla king of the Space kingdom a name
@@ -23,13 +23,13 @@ namespace Problem1
         }
 
         // Custom Input Parser for the 'A Golden Crown' problem
-        private static bool GoldenCrownParser(string input)
+        private static bool AGoldenCrownParser(string input)
         {
             return input.IndexOf('"') != -1;
         }
 
         // Custom Input Action for the 'A Golden Crown' problem
-        private static string GoldenCrownAction(string input, ISoutheros southeros)
+        private static string AGoldenCrownAction(string input, ISoutheros southeros)
         {
             // Declare local variables
             var output = string.Empty;

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace Engine
 {
@@ -12,16 +12,30 @@ namespace Engine
         private static string[] thousandsGroups = { "", " Thousand", " Million", " Billion" };
 
         #region Error Messages
-        public const string InvalidKingdomMessage = "Our messengers couldn't reach '{0}'. Maybe we should try sending messaged just to our neighbouring kingdoms for now.";
+        public const string InvalidKingdomMessage = "'{0}' isn't a know kingdom from this realm.";
         public const string TooManyKingdomsMessage = "Alas! All the kingdoms wanted the thone for themselves and The High Priest couldn't stop the war.";
         public const string BallotTookTooLongMessage = "Alas! The process took too long the the kings grew weary. The battle could not be avoided.";
         public const string NoCompetingKingdomsMessage = "Atleast two kingdoms need to be competing to use the ballott system to decide a ruler.";
         public const string EmblemNotDefinedMessage = "Looks like the game dev forgot to add an emblem for the {0} kingdom";
+        public const string RulerCrownedMessage = "{0} has already been crowned as the ruler.";
         #endregion
+
+        public static List<string> listOfMessages;
 
         static Utility()
         {
-
+            // Read the list of messages
+            listOfMessages = new List<string>();
+            var resourceName = "Engine.Engine.Resources.messages.txt";
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    listOfMessages.Add(line);
+                }
+            }
         }
 
         private static string FriendlyInteger(int n, string leftDigits, int thousands)

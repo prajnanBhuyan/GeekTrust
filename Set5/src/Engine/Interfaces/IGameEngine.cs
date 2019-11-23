@@ -11,9 +11,4 @@ namespace Engine.Interfaces
         void Execute();
         string ProcessInput(string input);
     }
-
-    public interface IGameObject
-    {
-        List<Kingdom> CompeteingKingdoms { get; set; }
-    }
 }

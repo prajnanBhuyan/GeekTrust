@@ -57,6 +57,9 @@ Give proper credits. This could be a link to any repo which inspired you to buil
 
 2. Set a limit for the ballot rounds so that in an unfortunate event we don't go on going forever.
 
+3. A competing kingdom WILL compose a message for another competing kingdom and can posibbly be one of the 6 that the high priest decides to send out as understood by point 2 of **Rules to decide allegiance by a kingdom**:
+    *If the receiving kingdom is competing to be the ruler, they will not give their allegiance even if the message they received is correct.*
+    
 ## License
 A short snippet describing the license (MIT, Apache etc)
 
