@@ -8,7 +8,7 @@ namespace Problem2
         static void Main(string[] args)
         {
             // Initialising engine
-            var engine = new Engine.Engine();
+            var engine = new GameEngine();
 
             // Variable to store input from the user
             string input = string.Empty;
@@ -35,11 +35,11 @@ namespace Problem2
                     }
 
                     if (noOfCompetitors < 2)
-                        output = Engine.Engine.NoCompetingKingdoms;
+                        output = GameEngine.NoCompetingKingdoms;
                     else if (noOfCompetitors < Enum.GetValues(typeof(Kingdoms)).Length)
                         engine.FindRulerByBallot();
                     else
-                        output = Engine.Engine.TooManyCompetingKingdoms;
+                        output = GameEngine.TooManyCompetingKingdoms;
                 }
 
                 // Handle all other input

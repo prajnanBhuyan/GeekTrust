@@ -1,7 +1,7 @@
 using Engine;
 using NUnit.Framework;
 using System;
-using static Engine.Engine;
+using static Engine.GameEngine;
 
 namespace Set5.Tests
 {

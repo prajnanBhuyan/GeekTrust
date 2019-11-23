@@ -1,4 +1,5 @@
 ﻿using Engine;
+using Engine.Interfaces;
 using System;
 
 namespace Problem1
@@ -7,51 +8,63 @@ namespace Problem1
     {
         static void Main()
         {
-            // Initialising engine
-            var engine = new Engine.Engine();
-
-            // Fixed competitor for Problem1
-            var competingKingdom = Kingdoms.Space;
-
-            // Declaring contestant for the throne
-            engine.AllKingdoms[competingKingdom].IsCompeting = true;
-            // Assign the kings name
-            engine.AllKingdoms[competingKingdom].King = "King Shan";
-
-            // Variables to store input and output from the user
-            string input = string.Empty;
-
-            // Keep reading input from the user unit they enter "exit"
-            while (!(input = Console.ReadLine().Trim().ToLower()).Contains("exit"))
+            // Initialize game engine
+            var mGameEngine = new GameEngine()
             {
-                string output;
+                CustomInputParser = GoldenCrownParser,
+                CustomInputAction = GoldenCrownAction
+            };
 
-                int index;
-                // In case the user wishes to send a message
-                if ((index = input.IndexOf('"')) != -1)
-                {
-                    var recipient = input.Substring(0, index).Trim(new char[] { ' ', ',' });
-                    var messageText = input.Substring(index + 1, input.LastIndexOf('"') - index - 1);
+            // Give the gorilla king of the Space kingdom a name
+            mGameEngine.AllKingdoms[Kingdoms.Space].King = "King Shan";
 
-                    if (Enum.TryParse(recipient, true, out Kingdoms recipientKingdom))
-                    {
-                        output = string.Empty;
-                        engine.SendMessage(new Message(competingKingdom, recipientKingdom, messageText));
-                        engine.FindRulerByRightToRule(competingKingdom);
-                    }
-                    else
-                    {
-                        output = string.Format(Engine.Engine.InvalidKingdomErrorMessage, recipient);
-                    }
-                }
+            // Start program execution
+            mGameEngine.Execute();
+        }
 
-                // Handle all other input
-                else
-                    output = engine.ProcessInput(input);
+        // Custom Input Parser for the 'A Golden Crown' problem
+        private static bool GoldenCrownParser(string input)
+        {
+            return input.IndexOf('"') != -1;
+        }
 
-                if (!string.IsNullOrWhiteSpace(output)) Console.WriteLine(output);
+        // Custom Input Action for the 'A Golden Crown' problem
+        private static string GoldenCrownAction(string input, ISoutheros southeros)
+        {
+            // Declare local variables
+            var output = string.Empty;
+            var competingKingdom = Kingdoms.Space;
+            var reqRightToRule = 3;
 
+            // Try parsing the input into target kingdom and message
+            var index = input.IndexOf('"');
+            var recipient = input.Substring(0, index).Trim(new char[] { ' ', ',' });
+            // TODO: Handle and add test cases for scenario where user enter corrupt message like:
+            //          Air, "User dozes of while wri...
+            //          Ice, User forgot to enter starting inverted comma"
+            var messageText = input.Substring(index + 1, input.LastIndexOf('"') - index - 1);
+
+            // Try parsing the target kingdom to verify target is valid
+            if (Enum.TryParse(recipient, true, out Kingdoms recipientKingdom))
+            {
+                // Create message object
+                var message = new Message(competingKingdom, recipientKingdom, messageText);
+
+                // Send out message
+                southeros.AllKingdoms[competingKingdom].SendMessage(southeros.AllKingdoms[recipientKingdom], message);
+
+                // Check if the competeing kingdom now has the required number of allies
+                if (southeros.AllKingdoms[competingKingdom].Allies.Count >= reqRightToRule)
+                    // If so, set the value for the ruling kingdom
+                    southeros.RulingKingdom = southeros.AllKingdoms[competingKingdom];
             }
+            // If target is invalid, return appropriate error message
+            else
+            {
+                output = string.Format(Utility.InvalidKingdomMessage, recipient);
+            }
+
+            return output;
         }
     }
 }

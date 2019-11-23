@@ -4,41 +4,95 @@ using System.Text;
 
 namespace Engine
 {
-    public enum Kingdoms
-    {
-        Space = 0,
-        Land = 1,
-        Water = 2,
-        Ice = 3,
-        Air = 4,
-        Fire = 5,
-        None
-    };
-
     public class Kingdom
     {
-        private readonly Kingdoms kingdomType;
-
-        public string King;
+        public readonly Kingdoms Name;
         public readonly string Emblem;
 
-        public string Name { get { return kingdomType.ToString(); } }
+        public string King;
         public bool IsCompeting { get; set; }
         public List<Kingdoms> Allies { get; }
 
-        public Kingdom(Kingdoms kingdom)
+        #region Constructor(s)
+        public Kingdom(Kingdoms kingdom, string emblem)
         {
-            this.kingdomType = kingdom;
-            Emblem = Engine.Emblems[(int)kingdom];
+            Name = kingdom;
+            Emblem = emblem;
             Allies = new List<Kingdoms>();
         }
+        #endregion
 
-        public Kingdom(Kingdoms kingdom, string rulerName)
+        /// <summary>
+        /// Checks if the kingdom's favirote animal has been sneakily added into the message.
+        /// </summary>
+        /// <param name="message">The message being sent to create an alliance.</param>
+        /// <returns></returns>
+        private bool IsPleasing(string message)
         {
-            this.kingdomType = kingdom;
-            King = rulerName;
-            Emblem = Engine.Emblems[(int)kingdom];
-            Allies = new List<Kingdoms>();
+            var isValid = message.Length >= Emblem.Length;
+
+            for (int i = 0; isValid && i < Emblem.Length; i++)
+            {
+                int index;
+
+                if ((index = message.IndexOf(Emblem[i])) != -1)
+                    message = message.Remove(index, 1);
+                else
+                    isValid = false;
+            }
+
+            return isValid;
+        }
+
+        /// <summary>
+        /// If acceptable, adds the kingdom that sent the message to the list of Allies
+        /// </summary>
+        /// <param name="message">The secret message to form an alliance</param>
+        /// <returns></returns>
+        public bool AccepAlliance(Message message)
+        {
+            var accept = false;
+
+            // Only accept an alliance if:
+            //  1. The recieving kingdom itself is not competing
+            //  2. It is not already allied with another kingdom
+            //  3. If the message contains the emblem animal of the recieving kingdom
+            if (!IsCompeting &&
+                Allies.Count == 0 &&
+                IsPleasing(message.Text))
+            {
+                Allies.Add(message.Sender);
+                accept = true;
+            }
+
+            return accept;
+        }
+
+        /// <summary>
+        /// Sends a message to another kingdom in an attempt to form an alliance.
+        /// </summary>
+        /// <param name="recipientKingdom">The kingdom the message is sent to</param>
+        /// <param name="message">The message to be sent</param>
+        /// <remarks>If the alliance request is accepted, the kingdom is added to the list of allies</remarks>
+        public void SendMessage(Kingdom recipientKingdom, Message message)
+        {
+            // Check if:
+            //  1. The kingdom is already an ally
+            //  2. If not, see if they accept the alliance
+            if (!Allies.Contains(recipientKingdom.Name) &&
+                recipientKingdom.AccepAlliance(message))
+            {
+                // If the recieving kingdom accepts the alliance add them to the Allies list
+                Allies.Add(message.Recipient);
+            }
+        }
+
+        /// <summary>
+        /// Break all existing alliances.
+        /// </summary>
+        public void BreakAlliances()
+        {
+            Allies.Clear();
         }
     }
 }
