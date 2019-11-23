@@ -6,27 +6,33 @@ using System.Linq;
 
 namespace Problem2
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+            // Create BreakerOfChains object
+            var breakerOfChains = new BreakerOfChains();
+
             // Initialize game engine
             var mGameEngine = new GameEngine()
             {
-                CustomInputParser = BreakerOfChainsParser,
-                CustomInputAction = BreakerOfChainsAction
+                CustomInputValidator = breakerOfChains.BreakerOfChainsValidator,
+                CustomInputAction = breakerOfChains.BreakerOfChainsAction
             };
 
             // Start program execution
             mGameEngine.Execute();
         }
+    }
 
+    public class BreakerOfChains
+    {
         /// <summary>
         /// Custom Input Parser for the 'Breaker of Chains' problem
         /// </summary>
         /// <param name="input">Takes the user input</param>
         /// <returns>Returns a bool value stating whether the user input can be handled</returns>
-        private static bool BreakerOfChainsParser(string input)
+        public bool BreakerOfChainsValidator(string input)
         {
             return input.Contains("enter") && input.Contains("kingdoms competing");
         }
@@ -37,7 +43,7 @@ namespace Problem2
         /// <param name="input">The user input</param>
         /// <param name="southeros"></param>
         /// <returns></returns>
-        private static string BreakerOfChainsAction(string input, ISoutheros southeros)
+        public string BreakerOfChainsAction(string input, ISoutheros southeros)
         {
             // Once a ruler has been found, we no longer need to hold a ballot
             if (southeros.RulingKingdom != null)
@@ -50,7 +56,7 @@ namespace Problem2
             var messagesToChoose = 6;
 
             // Read the list of competitors from the user
-            var possibleCandidates = Console.ReadLine().Trim().Split(" ");
+            var possibleCandidates = GetPotentialCandidates();
 
             // Try parsing the user input into valid kingdoms
             foreach (var candidate in possibleCandidates)
@@ -78,13 +84,18 @@ namespace Problem2
             return output;
         }
 
+        protected virtual string[] GetPotentialCandidates()
+        {
+            return Console.ReadLine().Trim().Replace(',', ' ').Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        }
+
         /// <summary>
         /// Finds the ruler of Southeros using a ballot system
         /// </summary>
         /// <param name="southeros"></param>
         /// <param name="maxRounds">Maximum number of rounds the ballot can go upto in case of ties</param>
         /// <param name="messagesToChoose">The number of messages the high priest can choose to send out</param>
-        private static void FindRulerByBallot(ISoutheros southeros, int maxRounds, int messagesToChoose)
+        protected void FindRulerByBallot(ISoutheros southeros, int maxRounds, int messagesToChoose)
         {
             //Ballot round
             int round = 0;
@@ -159,7 +170,7 @@ namespace Problem2
                 Console.WriteLine($"Tied Kingdoms: {string.Join(", ", leadingKingdoms.Select(k => $"{k.Key} ({k.Value.Allies.Count})"))}");
                 foreach (var kv in leadingKingdoms)
                 {
-                    Console.WriteLine($"Allies of {kv.Key}: {(string.Join(", ",kv.Value.Allies))}");
+                    Console.WriteLine($"Allies of {kv.Key}: {(string.Join(", ", kv.Value.Allies))}");
                 }
 #endif
 

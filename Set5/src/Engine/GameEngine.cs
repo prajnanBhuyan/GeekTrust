@@ -31,7 +31,7 @@ namespace Engine
         public Dictionary<Kingdoms, Kingdom> AllKingdoms { get; }
         public Kingdom RulingKingdom { get; set; }
 
-        public Func<string, bool> CustomInputParser { get; set; }
+        public Func<string, bool> CustomInputValidator { get; set; }
         public Func<string, ISoutheros, string> CustomInputAction { get; set; }
 
         public GameEngine()
@@ -40,7 +40,17 @@ namespace Engine
             AllKingdoms = new Dictionary<Kingdoms, Kingdom>();
             foreach (Kingdoms kingdom in Enum.GetValues(typeof(Kingdoms)))
             {
-                AllKingdoms.Add(kingdom, new Kingdom(kingdom, Emblems[kingdom]));
+                try
+                {
+                    AllKingdoms.Add(kingdom, new Kingdom(kingdom, Emblems[kingdom]));
+                }
+                catch (KeyNotFoundException keyNotFoundException)
+                {
+                    var message = $"Looks like the dev forgot to add the emblem for {kingdom}{Environment.NewLine}";
+                    message += $"Message:{Environment.NewLine}{keyNotFoundException.Message}{Environment.NewLine}";
+                    message += $"Stacktrace:{Environment.NewLine}{keyNotFoundException.StackTrace}{Environment.NewLine}";
+                    Console.WriteLine(message);
+                }
             }
         }
 
@@ -53,12 +63,22 @@ namespace Engine
             // Variables to store input and output from the user
             string input, output;
 
-            // Keep reading input from the user unit they enter "exit"
-            while (!(input = Console.ReadLine().Trim().ToLower()).Contains("exit"))
+            try
             {
-                output = ProcessInput(input);
+                // Keep reading input from the user unit they enter "exit"
+                while (!(input = Console.ReadLine().Trim().ToLower()).Contains("exit"))
+                {
+                    output = ProcessInput(input);
 
-                if (!string.IsNullOrWhiteSpace(output)) Console.WriteLine(output);
+                    if (!string.IsNullOrWhiteSpace(output)) Console.WriteLine(output);
+                }
+            }
+            catch(Exception ex)
+            {
+                var message = $"Well, this is embarrassing. You weren't supposed to see this.";
+                message += $"Message:{Environment.NewLine}{ex.Message}{Environment.NewLine}";
+                message += $"Stacktrace:{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}";
+                Console.WriteLine(message);
             }
         }
 
@@ -90,7 +110,7 @@ namespace Engine
             }
 
             // Or if the input is successfully parsed by the custom parser
-            else if (CustomInputParser(input))
+            else if (CustomInputValidator(input))
             {
                 output = CustomInputAction(input, this);
             }

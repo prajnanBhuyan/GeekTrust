@@ -77,9 +77,11 @@ namespace Engine
         public void SendMessage(Kingdom recipientKingdom, Message message)
         {
             // Check if:
-            //  1. The kingdom is already an ally
-            //  2. If not, see if they accept the alliance
-            if (!Allies.Contains(recipientKingdom.Name) &&
+            //  1. The kingdom is not sending a message to itself
+            //  2. The kingdom is already an ally
+            //  3. If not, see if they accept the alliance
+            if (Name != recipientKingdom.Name &&
+                !Allies.Contains(recipientKingdom.Name) &&
                 recipientKingdom.AccepAlliance(message))
             {
                 // If the recieving kingdom accepts the alliance add them to the Allies list

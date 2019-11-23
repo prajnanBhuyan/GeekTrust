@@ -8,22 +8,25 @@ namespace Problem1
     {
         static void Main()
         {
+            // Create BreakerOfChains object
+            var aGoldenCrown = new AGoldenCrown();
+
             // Initialize game engine
             var mGameEngine = new GameEngine()
             {
-                CustomInputParser = AGoldenCrownParser,
-                CustomInputAction = AGoldenCrownAction
+                CustomInputValidator = aGoldenCrown.AGoldenCrownValidator,
+                CustomInputAction = aGoldenCrown.AGoldenCrownAction
             };
-
-            // Give the gorilla king of the Space kingdom a name
-            mGameEngine.AllKingdoms[Kingdoms.Space].King = "King Shan";
 
             // Start program execution
             mGameEngine.Execute();
         }
+    }
 
+    public class AGoldenCrown
+    {
         // Custom Input Parser for the 'A Golden Crown' problem
-        private static bool AGoldenCrownParser(string input)
+        public bool AGoldenCrownValidator(string input)
         {
             var index = input.IndexOf('"');
             var lastIndex = input.LastIndexOf('"');
@@ -33,18 +36,24 @@ namespace Problem1
             //  Example:
             //      a. air, "send owl"      Kingdom: air    Message: send owl
             //      b. air"send"~"owl"      Kingdom: air    Message: send"~"owl
-            return index != -1 &&
+            return index > 0 &&
                     lastIndex > index + 1;
 
         }
 
         // Custom Input Action for the 'A Golden Crown' problem
-        private static string AGoldenCrownAction(string input, ISoutheros southeros)
+        public string AGoldenCrownAction(string input, ISoutheros southeros)
         {
             // Declare local variables
             var output = string.Empty;
+            // The only competing kingdom as per the problem is the SpaceKingdom (this can 
+            // be changed here any time)
             var competingKingdom = Kingdoms.Space;
+            // Required right to rule is the number of kingdoms the competingKingdom kingdom
+            // needs to be allied with in order to be crowned as the ruler
             var reqRightToRule = 3;
+            // Give the gorilla king of the Space kingdom a name
+            southeros.AllKingdoms[Kingdoms.Space].King = "King Shan";
 
             // Try parsing the input into target kingdom and message
             var index = input.IndexOf('"');
