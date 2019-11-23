@@ -25,7 +25,17 @@ namespace Problem1
         // Custom Input Parser for the 'A Golden Crown' problem
         private static bool AGoldenCrownParser(string input)
         {
-            return input.IndexOf('"') != -1;
+            var index = input.IndexOf('"');
+            var lastIndex = input.LastIndexOf('"');
+            // We expect an input that contains:
+            //  1. The name of the kingdom it is addressed to
+            //  2. The message enclosed in inverted commas
+            //  Example:
+            //      a. air, "send owl"      Kingdom: air    Message: send owl
+            //      b. air"send"~"owl"      Kingdom: air    Message: send"~"owl
+            return index != -1 &&
+                    lastIndex > index + 1;
+
         }
 
         // Custom Input Action for the 'A Golden Crown' problem
@@ -39,9 +49,6 @@ namespace Problem1
             // Try parsing the input into target kingdom and message
             var index = input.IndexOf('"');
             var recipient = input.Substring(0, index).Trim(new char[] { ' ', ',' });
-            // TODO: Handle and add test cases for scenario where user enter corrupt message like:
-            //          Air, "User dozes of while wri...
-            //          Ice, User forgot to enter starting inverted comma"
             var messageText = input.Substring(index + 1, input.LastIndexOf('"') - index - 1);
 
             // Try parsing the target kingdom to verify target is valid
