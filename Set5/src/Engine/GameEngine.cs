@@ -50,9 +50,12 @@ namespace Engine
                 }
                 catch (KeyNotFoundException keyNotFoundException)
                 {
-                    throw new KeyNotFoundException($"Emblem not defined for {kingdom}{Environment.NewLine}", keyNotFoundException);
+                    throw new KeyNotFoundException($"Emblem not defined for {kingdom}", keyNotFoundException);
                 }
             }
+
+            // Initialise CustomInputValidator
+            CustomInputValidator = (string anything) => { return false; };
         }
 
         /// <summary>
@@ -62,14 +65,16 @@ namespace Engine
         public void Execute()
         {
             // Variables to store input and output from the user
-            string input, output;
+            string input, output = string.Empty;
 
             // Keep reading input from the user unit they enter "exit"
             while (!(input = console.ReadLine().Trim().ToLower()).Contains("exit"))
             {
-                output = ProcessInput(input);
+                if (!string.IsNullOrWhiteSpace(input))
+                    output = ProcessInput(input);
 
-                if (!string.IsNullOrWhiteSpace(output)) console.WriteLine(output);
+                if (!string.IsNullOrWhiteSpace(output))
+                    console.WriteLine(output);
             }
         }
 
@@ -83,7 +88,7 @@ namespace Engine
             string output = "Invalid input";
 
             // If the user asks who the ruler is
-            if (input.Contains("who is the ruler of southeros"))
+            if (input.Contains("who is the ruler") || input.Contains("ruler of southeros"))
             {
                 if (RulingKingdom != null)
                     output = string.IsNullOrWhiteSpace(RulingKingdom.King) ? RulingKingdom.Name.ToString() : RulingKingdom.King;
