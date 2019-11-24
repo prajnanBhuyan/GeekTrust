@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Problem1\TameOfThrones.csproj" />
+    <ProjectReference Include="..\TameOfThrones\TameOfThrones.csproj" />
   </ItemGroup>
 
 </Project>

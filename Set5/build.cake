@@ -1,17 +1,28 @@
 var target = Argument ("target", "Default");
 
 var slnPath = "./src/Set5.sln";
-var problem1 = "./src/Problem1/Problem1.csproj";
-var problem2 = "./src/Problem2/Problem2.csproj";
-var testPath = "./src/Set5.Tests/bin/Debug/netcoreapp3.0/Set5.Tests.dll";
+var compiledPath = "./src/Build/Compiled/";
+var enginePath = "./src/Engine/Engine.csproj";
+var consolePath = "./src/TameOfThrones/TameOfThrones.csproj";
+var testPath = "./src/TameOfThrones.Tests/TameOfThrones.Tests.csproj";
+var compiledTestsPath = $"{compiledPath}/TameOfThrones.Tests.dll";
 
 Task ("Default")
     .IsDependentOn("Clean")
     .IsDependentOn ("RestoreNuGet")
     .IsDependentOn ("Build")
-    .IsDependentOn ("Publish")
     .IsDependentOn ("Test");
 
+Task("Clean")
+    .Does(() => {
+        var settings = new DotNetCoreCleanSettings
+        {
+            Configuration = "Release"
+        };
+        DotNetCoreClean(enginePath, settings);
+        DotNetCoreClean(consolePath, settings);
+        DotNetCoreClean(testPath, settings);
+    });
 
 Task("RestoreNuGet")
     .Does(() => {
@@ -20,25 +31,16 @@ Task("RestoreNuGet")
 
 Task("Build")
     .Does(() => {
-        DotNetCoreBuild(slnPath);
+        var settings = new DotNetCoreBuildSettings
+        {
+            Configuration = "Release"
+        };
+        DotNetCoreBuild(slnPath, settings);
     });
-
-Task("Clean")
-    .Does(() => {
-        DotNetCoreClean(problem1);
-        DotNetCoreClean(problem2);
-    });
-
-Task ("Publish")
-    .Does (() => {
-        DotNetCorePublish (problem1);
-        DotNetCorePublish (problem2);
-    });
-
 
 Task ("Test")
     .Does (() => {
-        DotNetCoreVSTest(testPath);
+        DotNetCoreTest(testPath);
     });
 
 RunTarget (target);
