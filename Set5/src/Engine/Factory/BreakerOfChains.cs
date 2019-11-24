@@ -1,34 +1,12 @@
-﻿using Engine;
-using Engine.Interfaces;
+﻿using Engine.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-namespace Problem2
+namespace Engine.Factory
 {
-    public class Program
-    {
-        static void Main()
-        {
-            // Create new ConsoleMethods object
-            var consoleMethods = new ConsoleMethods();
-
-            // Create BreakerOfChains object
-            var breakerOfChains = new BreakerOfChains(consoleMethods);
-
-            // Initialize game engine
-            var mGameEngine = new GameEngine(consoleMethods)
-            {
-                CustomInputValidator = breakerOfChains.BreakerOfChainsValidator,
-                CustomInputAction = breakerOfChains.BreakerOfChainsAction
-            };
-
-            // Start program execution
-            mGameEngine.Execute();
-        }
-    }
-
-    public class BreakerOfChains
+    public class BreakerOfChains : ICustomGameObject
     {
         // Using consoleMethos instead of directly using System.Console
         public IConsoleMethods console;
@@ -43,7 +21,7 @@ namespace Problem2
         /// </summary>
         /// <param name="input">Takes the user input</param>
         /// <returns>Returns a bool value stating whether the user input can be handled</returns>
-        public bool BreakerOfChainsValidator(string input)
+        public bool CustomInputValidator(string input)
         {
             return input.Contains("enter") && input.Contains("kingdoms competing");
         }
@@ -55,7 +33,7 @@ namespace Problem2
         /// <param name="southeros"></param>
         /// <returns></returns>
         /// <remarks>We don't particularly require the input data in this function but we keep it anyway to match the function signature</remarks>
-        public string BreakerOfChainsAction(string input, ISoutheros southeros)
+        public string CustomInputAction(string input, ISoutheros southeros)
         {
             // Once a ruler has been found, we no longer need to hold a ballot
             if (southeros.RulingKingdom != null)

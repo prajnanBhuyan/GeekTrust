@@ -1,9 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <OutputPath>..\Build\Compiled\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Problem1\Problem1.csproj" />
-    <ProjectReference Include="..\Problem2\Problem2.csproj" />
   </ItemGroup>
 
 </Project>

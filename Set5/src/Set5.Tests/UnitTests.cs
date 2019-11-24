@@ -3,8 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Problem1;
-using Problem2;
+using Engine.Factory;
 using Engine.Interfaces;
 
 namespace Set5.Tests
@@ -92,7 +91,7 @@ namespace Set5.Tests
             var aGoldenCrown = new AGoldenCrown();
 
             // Act
-            var actual = aGoldenCrown.AGoldenCrownValidator(input);
+            var actual = aGoldenCrown.CustomInputValidator(input);
 
             // Assert
             Assert.IsTrue(actual, $"Failed for [{input}]");
@@ -122,7 +121,7 @@ namespace Set5.Tests
             var aGoldenCrown = new AGoldenCrown();
 
             // Act
-            var actual = aGoldenCrown.AGoldenCrownValidator(input);
+            var actual = aGoldenCrown.CustomInputValidator(input);
 
             // Assert
             Assert.IsFalse(actual, $"Failed for [{input}]");
@@ -153,7 +152,7 @@ namespace Set5.Tests
             var expected = string.Format(Utility.InvalidKingdomMessage, invalidKingdomName);
 
             // Act
-            var actual = aGoldenCrown.AGoldenCrownAction(input, testGameEngine);
+            var actual = aGoldenCrown.CustomInputAction(input, testGameEngine);
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -187,7 +186,7 @@ namespace Set5.Tests
             input = input.ToLower().Trim();
 
             // Act
-            aGoldenCrown.AGoldenCrownAction(input, testGameEngine);
+            aGoldenCrown.CustomInputAction(input, testGameEngine);
 
             // Assert
             Assert.That(!testGameEngine.AllKingdoms[competingKingdom].Allies.Contains(kingdom) &&
@@ -220,7 +219,7 @@ namespace Set5.Tests
             input = input.ToLower().Trim();
 
             // Act
-            aGoldenCrown.AGoldenCrownAction(input, testGameEngine);
+            aGoldenCrown.CustomInputAction(input, testGameEngine);
 
             // Assert
             Assert.That(testGameEngine.AllKingdoms[competingKingdom].Allies.Contains(kingdom) &&
@@ -247,7 +246,7 @@ namespace Set5.Tests
 
             // Act
             foreach (var kingdom in listOfKingdoms)
-                aGoldenCrown.AGoldenCrownAction(@$"{kingdom}, ""{GameEngine.Emblems[kingdom]}""", testGameEngine);
+                aGoldenCrown.CustomInputAction(@$"{kingdom}, ""{GameEngine.Emblems[kingdom]}""", testGameEngine);
 
             // Assert
             Assert.That(testGameEngine.RulingKingdom != null &&
@@ -305,7 +304,7 @@ namespace Set5.Tests
             input = input.ToLower().Trim();
 
             // Act
-            var actual = breakerOfChains.BreakerOfChainsValidator(input);
+            var actual = breakerOfChains.CustomInputValidator(input);
 
             // Assert
             Assert.IsTrue(actual, $"Failed for [{input}]");
@@ -335,7 +334,7 @@ namespace Set5.Tests
             input = input.ToLower().Trim();
 
             // Act
-            var actual = breakerOfChains.BreakerOfChainsValidator(input);
+            var actual = breakerOfChains.CustomInputValidator(input);
 
             // Assert
             Assert.IsFalse(actual, $"Failed for [{input}]");
@@ -363,7 +362,7 @@ namespace Set5.Tests
             var breakerOfChains = new BreakerOfChains(consoleMethods);
 
             // Act
-            var actual = breakerOfChains.BreakerOfChainsAction(input, testGameEngine);
+            var actual = breakerOfChains.CustomInputAction(input, testGameEngine);
 
             // Assert
             Assert.AreEqual(Utility.NoCompetingKingdomsMessage, actual);
@@ -382,7 +381,7 @@ namespace Set5.Tests
             var breakerOfChains = new BreakerOfChains(consoleMethods);
 
             // Act
-            var actual = breakerOfChains.BreakerOfChainsAction(string.Empty, testGameEngine);
+            var actual = breakerOfChains.CustomInputAction(string.Empty, testGameEngine);
 
             // Assert
             Assert.AreEqual(Utility.TooManyKingdomsMessage, actual);
@@ -419,7 +418,7 @@ namespace Set5.Tests
             expected += Utility.NoCompetingKingdomsMessage;
 
             // Act
-            var actual = breakerOfChains.BreakerOfChainsAction(string.Empty, testGameEngine);
+            var actual = breakerOfChains.CustomInputAction(string.Empty, testGameEngine);
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -452,7 +451,7 @@ namespace Set5.Tests
             var breakerOfChains = new BreakerOfChains(consoleMethods);
 
             // Act
-            var actual = breakerOfChains.BreakerOfChainsAction(string.Empty, testGameEngine);
+            var actual = breakerOfChains.CustomInputAction(string.Empty, testGameEngine);
 
             // Assert
             Assert.That(testGameEngine.RulingKingdom != null ||
@@ -516,14 +515,12 @@ namespace Set5.Tests
     {
         TestConsoleMethods consoleMethods;
         MultiIOConsoleMethods multiIOConsoleMethods;
-        Random rnd;
 
         [OneTimeSetUp]
         public void EngineAndModelTestsInitialise()
         {
             consoleMethods = new TestConsoleMethods();
             multiIOConsoleMethods = new MultiIOConsoleMethods();
-            rnd = new Random();
         }
 
         public static IEnumerable<TestCaseData> GetKingdomsOneAtATime()
@@ -548,7 +545,7 @@ namespace Set5.Tests
                 // Act
                 var testGameEngine = new GameEngine(consoleMethods);
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
                 // We consider the test to pass when the constructor throws an KeyNotFoundException
                 testPass = true;
@@ -556,7 +553,7 @@ namespace Set5.Tests
             catch (Exception ex)
             {
                 // For any other exception
-                Assert.Fail($"Unhabdled exception: {ex.Message}");
+                Assert.Fail($"Unhandled exception: {ex.Message}");
             }
             finally
             {
@@ -739,7 +736,7 @@ namespace Set5.Tests
             Assert.AreEqual(expectedOutput, actual);
         }
 
-        
+
         public static IEnumerable<TestCaseData> GetKingdomsTwoAtATime()
         {
             var totalKingdoms = Enum.GetValues(typeof(Kingdoms)).Length;
@@ -764,7 +761,7 @@ namespace Set5.Tests
             Assert.AreEqual(testGameEngine.AllKingdoms[receivingKingdom].Allies.FirstOrDefault(), sendingKingdom);
         }
 
-        
+
         [Test]
         [Category("EngineAndModelTests")]
         [Category("KingdomModelTest")]
