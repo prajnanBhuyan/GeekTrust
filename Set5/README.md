@@ -1,56 +1,24 @@
-## Project title
-A little info about your project and/ or overview that explains **what** the project is about.
+## Tame of Thrones
+My solution to the GeekTrust backend problem set Tame of Thromes. This is a C# solution containing two seperate console application for the two seperate problems in the problem set. Both the console applications run on the same engine.
 
-## Motivation
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
+## Solution status
+![](https://github.com/prajnanBhuyan/GeekTrust/workflows/Set%205%20Build%20and%20Test/badge.svg)
 
-## Build status
-Build status of continus integration i.e. travis, appveyor etc. Ex. - 
-
-[![Build Status](https://travis-ci.org/akashnimare/foco.svg?branch=master)](https://travis-ci.org/akashnimare/foco)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/akashnimare/foco?branch=master&svg=true)](https://ci.appveyor.com/project/akashnimare/foco/branch/master)
-
-## Code style
-If you're using any code style like xo, standard etc. That will help others while contributing to your project. Ex. -
-
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
- 
-## Screenshots
-Include logo/demo screenshot etc.
-
-## Tech/framework used
-Ex. -
-
-<b>Built with</b>
-- [Electron](https://electron.atom.io)
-
-## Features
-What makes your project stand out?
+## Framework used
+- [.NET Core 3](https://dotnet.microsoft.com/download/dotnet-core/3.0) to create the application 
+- [Cake Build](https://cakebuild.net/) to create the build scripts
 
 ## Code Example
-Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
+I plan on updating the project a little further. Will update with code examples after that.
 
 ## Installation
 Provide step by step series of examples and explanations about how to get a development env running.
-
-## API Reference
-
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
 
 ## Tests
 Describe and show how to run the tests with code examples.
 
 ## How to use?
 If people like your project they’ll want to learn how they can use it. To do so include step by step guide to use your project.
-
-## Contribute
-
-Let people know how they can contribute into your project. A [contributing guideline](https://github.com/zulip/zulip-electron/blob/master/CONTRIBUTING.md) will be a big plus.
-
-## Credits
-Give proper credits. This could be a link to any repo which inspired you to build this project, any blogposts or links to people who contrbuted in this project. 
-
-#### Anything else that seems useful
 
 ## Assumptions:
 1. The other kingdoms simply ignore any future messages sent to them once they recieve their first message. This behavious can be easily changed so as to mimic kingdoms getting offended on not having their emblem in the message and breaking off alliances that were already in place.
@@ -59,8 +27,7 @@ Give proper credits. This could be a link to any repo which inspired you to buil
 
 3. A competing kingdom WILL compose a message for another competing kingdom and can posibbly be one of the 6 that the high priest decides to send out as understood by point 2 of **Rules to decide allegiance by a kingdom**:
     *If the receiving kingdom is competing to be the ruler, they will not give their allegiance even if the message they received is correct.*
-    
-## License
-A short snippet describing the license (MIT, Apache etc)
 
-MIT © [Yourname]()
+4. Once a message is sent out, the high priest burns it in the holy flame so as to not send it out a second time by mistake.
+
+5. If three or more competing kingdoms are entered and one of them is invalid, the ballot process is conducted between between the two or more more valid kingdoms.

@@ -46,10 +46,7 @@ namespace Engine
                 }
                 catch (KeyNotFoundException keyNotFoundException)
                 {
-                    var message = $"Looks like the dev forgot to add the emblem for {kingdom}{Environment.NewLine}";
-                    message += $"Message:{Environment.NewLine}{keyNotFoundException.Message}{Environment.NewLine}";
-                    message += $"Stacktrace:{Environment.NewLine}{keyNotFoundException.StackTrace}{Environment.NewLine}";
-                    Console.WriteLine(message);
+                    throw new KeyNotFoundException($"Emblem not defined for {kingdom}{Environment.NewLine}", keyNotFoundException);
                 }
             }
         }
@@ -63,22 +60,12 @@ namespace Engine
             // Variables to store input and output from the user
             string input, output;
 
-            try
+            // Keep reading input from the user unit they enter "exit"
+            while (!(input = Console.ReadLine().Trim().ToLower()).Contains("exit"))
             {
-                // Keep reading input from the user unit they enter "exit"
-                while (!(input = Console.ReadLine().Trim().ToLower()).Contains("exit"))
-                {
-                    output = ProcessInput(input);
+                output = ProcessInput(input);
 
-                    if (!string.IsNullOrWhiteSpace(output)) Console.WriteLine(output);
-                }
-            }
-            catch(Exception ex)
-            {
-                var message = $"Well, this is embarrassing. You weren't supposed to see this.";
-                message += $"Message:{Environment.NewLine}{ex.Message}{Environment.NewLine}";
-                message += $"Stacktrace:{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}";
-                Console.WriteLine(message);
+                if (!string.IsNullOrWhiteSpace(output)) Console.WriteLine(output);
             }
         }
 

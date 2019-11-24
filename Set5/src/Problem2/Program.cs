@@ -76,7 +76,11 @@ namespace Problem2
                 output += Utility.NoCompetingKingdomsMessage;
             // and atmost one less than all of them
             else if (noOfCompetitors < Enum.GetValues(typeof(Kingdoms)).Length)
-                FindRulerByBallot(southeros, maxBallotRounds, messagesToChoose);
+            {
+                // FindRulerByBallot return false if we don't have a ruler after maxBallotRounds
+                if (!FindRulerByBallot(southeros, maxBallotRounds, messagesToChoose))
+                    output += Utility.BallotTookTooLongMessage;
+            }
             // If all the kingdoms compete, we can't proceed
             else
                 output += Utility.TooManyKingdomsMessage;
@@ -84,6 +88,10 @@ namespace Problem2
             return output;
         }
 
+        /// <summary>
+        /// Reads a list of space or comma delimited kingdoms from the user
+        /// </summary>
+        /// <returns>A list of space or comma delimited kingdoms</returns>
         protected virtual string[] GetPotentialCandidates()
         {
             return Console.ReadLine().Trim().Replace(',', ' ').Split(" ", StringSplitOptions.RemoveEmptyEntries);
@@ -95,18 +103,19 @@ namespace Problem2
         /// <param name="southeros"></param>
         /// <param name="maxRounds">Maximum number of rounds the ballot can go upto in case of ties</param>
         /// <param name="messagesToChoose">The number of messages the high priest can choose to send out</param>
-        protected void FindRulerByBallot(ISoutheros southeros, int maxRounds, int messagesToChoose)
+        /// <returns>Returns a boolean denoting whether a king was crowned or not</returns>
+        protected bool FindRulerByBallot(ISoutheros southeros, int maxRounds, int messagesToChoose)
         {
+            // Verify arguments passed
+            if (messagesToChoose < 1) throw new ArgumentException(Utility.InvalidMessagesToChoose, "messagesToChoose");
+
             //Ballot round
             int round = 0;
 
             // The drawing from the ballot goes on until a winner is decided or we reach maxRounds
             while (southeros.RulingKingdom == null &&
-                    round <= maxRounds)
+                    ++round <= maxRounds)
             {
-                // Start new round
-                round++;
-
                 // Randomizer to help The High Priest of Southeros choose the messages to send out
                 var rnd = new Random();
 
@@ -192,8 +201,7 @@ namespace Problem2
                     southeros.RulingKingdom = leadingKingdoms.FirstOrDefault().Value;
             }
 
-            if (southeros.RulingKingdom == null)
-                Console.WriteLine(Utility.BallotTookTooLongMessage);
+            return southeros.RulingKingdom != null;
         }
     }
 }

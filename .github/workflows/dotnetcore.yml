@@ -1,4 +1,4 @@
-name: Build
+name: Set 5 Build and Test
 
 on: [push]
 
@@ -19,3 +19,5 @@ jobs:
       if: matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest'
     - name: Build with dotnet
       run: dotnet build ./Set5/src/Set5.sln --configuration Release
+    - name: Test with dotnet
+      run: dotnet test ./Set5/src/Set5.sln --configuration Release

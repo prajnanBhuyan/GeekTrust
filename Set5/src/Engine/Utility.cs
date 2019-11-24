@@ -18,6 +18,7 @@ namespace Engine
         public const string NoCompetingKingdomsMessage = "Atleast two kingdoms need to be competing to use the ballott system to decide a ruler.";
         public const string EmblemNotDefinedMessage = "Looks like the game dev forgot to add an emblem for the {0} kingdom";
         public const string RulerCrownedMessage = "{0} has already been crowned as the ruler.";
+        public const string InvalidMessagesToChoose = "The number of messages to be choosen by the high priest should be more than 1";
         #endregion
 
         public static List<string> listOfMessages;

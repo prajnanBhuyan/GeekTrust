@@ -5,18 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Problem1;
 using Problem2;
+using Engine.Interfaces;
 
 namespace Set5.Tests
 {
-    // Tests for:
-    //  1. Problem1 custom input parser [2] [DONE]
-    //  2. Problem1 custom input action [3] [DONE]
-    //  3. Problem2 custom input parser
-    //  4. Problem2 custom input action
-    //  5. Problem2 ballot system
-    //  6. Kingdom's message sending abilities
-    //  7. Kingdom's alliance request processing abilities
-
     [TestFixture]
     public class Problem1Tests
     {
@@ -230,6 +222,11 @@ namespace Set5.Tests
             {
                 return SimulatedInput.Trim().Replace(',', ' ').Split(" ", StringSplitOptions.RemoveEmptyEntries);
             }
+
+            public bool FindRulerByBallotCaller(ISoutheros southeros, int maxRounds, int messagesToChoose)
+            {
+                return base.FindRulerByBallot(southeros, maxRounds, messagesToChoose);
+            }
         }
 
         public static IEnumerable<TestCaseData> InputDataValidFormat()
@@ -372,112 +369,107 @@ namespace Set5.Tests
         }
 
 
+        public static IEnumerable<TestCaseData> ValidKingdomInThrees()
+        {
+            // Test kingdoms in threes. This function will yeild results like:
+            // Space Land Water
+            // Land Water Ice
+            // Water Ice Air etc.
+
+            var totalKingdoms = Enum.GetValues(typeof(Kingdoms)).Length;
+            for (int i = 0; i < totalKingdoms; i++) yield return new TestCaseData($"{(Kingdoms)i} {((Kingdoms)((i + 1) % totalKingdoms))} {((Kingdoms)((i + 2) % totalKingdoms))}");
+        }
+        [Test]
+        [Category("BreakerOfChainsTest")]
+        [Category("CustomInputAction")]
+        [TestCaseSource("ValidKingdomInThrees")]
+        [Description("Checks that the BreakerOfChainsAction function either finds a ruler or returns the maximum rounds output")]
+        public void When_ValidKingdoms_Expect_RulerCrowned(string input)
+        {
+            // Arrange
+            var testGameEngine = new GameEngine();
+            // we cure the input as the user input is being converted to lower and 
+            // trimmed when being read from the console in the actual application
+            input = input.ToLower().Trim();
+            var breakerOfChains = new BreakerOfChainsTest() { SimulatedInput = input };
+
+            // Act
+            var actual = breakerOfChains.BreakerOfChainsAction(string.Empty, testGameEngine);
+
+            // Assert
+            Assert.That(testGameEngine.RulingKingdom != null ||
+                        actual == Utility.BallotTookTooLongMessage);
+        }
 
 
+        public static IEnumerable<TestCaseData> ListOfMaxBallotRounds()
+        {
+            yield return new TestCaseData(0);
+            yield return new TestCaseData(10);
+            yield return new TestCaseData(100);
+        }
+        [Test]
+        [Category("BreakerOfChainsTest")]
+        [Category("BallotProcess")]
+        [TestCaseSource("ListOfMaxBallotRounds")]
+        [Description("Checks that the FindRulerByBallot function stops after the specified number of rounds even if no king found")]
+        public void When_RoundsExceed_Expect_NoRuler(int maxRounds)
+        {
+            // Arrange
+            var testGameEngine = new GameEngine();
+            testGameEngine.AllKingdoms[Kingdoms.Air].IsCompeting = true;
+            testGameEngine.AllKingdoms[Kingdoms.Ice].IsCompeting = true;
+            var messagesToChoose = 6;
+            Utility.listOfMessages.Clear();
+            Utility.listOfMessages.Add("123456789");
+            var breakerOfChains = new BreakerOfChainsTest();
+
+            // Act
+            var actual = breakerOfChains.FindRulerByBallotCaller(testGameEngine, maxRounds, messagesToChoose);
+            // Explicitly call Utility class' static constructor so as to revert changes to listOfMessages
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(Utility).TypeHandle);
+
+            // Assert
+            Assert.False(actual);
+        }
 
 
+        [Test]
+        [Category("BreakerOfChainsTest")]
+        [Category("BallotProcess")]
+        [Description("Checks that the FindRulerByBallot function throws an Argument exception if messagesToChoose is 0")]
+        public void When_MessagesToSendZero_Expect_ArgumentException()
+        {
+            // Arrange
+            var maxRounds = 100;
+            var messagesToChoose = 0;
+            var testGameEngine = new GameEngine();
+            var breakerOfChains = new BreakerOfChainsTest();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //public static IEnumerable<TestCaseData> InputDataInvalidMessage()
-        //{
-        //    // For the Kingdom to be considered valid, it should match with a value from the Kingdoms enum
-        //    yield return new TestCaseData(@"Air, ""Ow1""", Kingdoms.Air);
-        //    yield return new TestCaseData(@"Land, ""Pan|)a""", Kingdoms.Land);
-        //    yield return new TestCaseData(@"Ice, ""Mamm0th""", Kingdoms.Ice);
-        //    yield return new TestCaseData(@"Water, ""Octopu5""", Kingdoms.Water);
-        //    yield return new TestCaseData(@"Fire, ""Dr@gon""", Kingdoms.Fire);
-        //    // Although Gorilla is the correct emblem animal of the space kingdom, 
-        //    // we don't expect the kingdom to form an alliance with itself
-        //    yield return new TestCaseData(@"Space, ""Gorilla""", Kingdoms.Space);
-        //}
-        //[Test]
-        //[Category("BreakerOfChainsTest")]
-        //[Category("CustomInputAction")]
-        //[TestCaseSource("InputDataInvalidMessage")]
-        //[Description("Checks that no alliance is formed when the correct kingdom but invalid message is passed")]
-        //public void When_ValidKingdomInvalidMessage_Expect_NoAlliance(string input, Kingdoms kingdom)
-        //{
-        //    // Arrange
-        //    var testGameEngine = new GameEngine();
-        //    // we cure the input as the user input is being converted to lower and 
-        //    // trimmed when being read from the console in the actual application
-        //    input = input.ToLower().Trim();
-
-        //    // Act
-        //    Problem1.Program.BreakerOfChainsAction(input, testGameEngine);
-
-        //    // Assert
-        //    Assert.That(!testGameEngine.AllKingdoms[competingKingdom].Allies.Contains(kingdom) &&
-        //                !testGameEngine.AllKingdoms[kingdom].Allies.Contains(competingKingdom));
-        //}
-
-
-        //public static IEnumerable<TestCaseData> InputDataValidKingdomAndMessage()
-        //{
-        //    // For the Kingdom to be considered valid, it should match with a value from the Kingdoms enum
-        //    yield return new TestCaseData(@"Air, ""Owl""", Kingdoms.Air);
-        //    yield return new TestCaseData(@"Land, ""Panda""", Kingdoms.Land);
-        //    yield return new TestCaseData(@"Ice, ""Mammoth""", Kingdoms.Ice);
-        //    yield return new TestCaseData(@"Water, ""Octopus""", Kingdoms.Water);
-        //    yield return new TestCaseData(@"Fire, ""Dragon""", Kingdoms.Fire);
-        //    //yield return new TestCaseData(@"Space, ""Gorilla""", Kingdoms.Space);
-        //}
-        //[Test]
-        //[Category("BreakerOfChainsTest")]
-        //[Category("CustomInputAction")]
-        //[TestCaseSource("InputDataValidKingdomAndMessage")]
-        //[Description("Checks that an alliance is formed when the correct kingdom and a valid message is passed")]
-        //public void When_ValidKingdomAndMessage_Expect_AllianceMade(string input, Kingdoms kingdom)
-        //{
-        //    // Arrange
-        //    var testGameEngine = new GameEngine();
-        //    // we cure the input as the user input is being converted to lower and 
-        //    // trimmed when being read from the console in the actual application
-        //    input = input.ToLower().Trim();
-
-        //    // Act
-        //    Problem1.Program.BreakerOfChainsAction(input, testGameEngine);
-
-        //    // Assert
-        //    Assert.That(testGameEngine.AllKingdoms[competingKingdom].Allies.Contains(kingdom) &&
-        //                testGameEngine.AllKingdoms[kingdom].Allies.Contains(competingKingdom));
-        //}
+            // Assert
+            var ex = Assert.Throws<ArgumentException>(() => breakerOfChains.FindRulerByBallotCaller(testGameEngine, maxRounds, messagesToChoose));
+            Assert.That(ex.ParamName, Is.EqualTo("messagesToChoose"));
+        }
     }
 
 
 
     public class EngineAndModelTests
     {
-        public static IEnumerable<TestCaseData> ValidKingdomMessages()
-        {
-            // For the Kingdom to be considered valid, it should match with a value from the Kingdoms enum
-            yield return new TestCaseData(@"Air, ""Let’s swing the sword together""");
-            yield return new TestCaseData(@"Land, ""Die or play the tame of thrones""");
-            yield return new TestCaseData(@"Ice, ""Ahoy! Fight for me with men and money""");
-            yield return new TestCaseData(@"Water, ""Summer is coming""");
-            yield return new TestCaseData(@"Fire, ""Drag on Martin!""");
-            yield return new TestCaseData(@"Space, ""Go risk it all""");
-        }
+        // Check engine constructor error for emblem
+
+        // Test Execute function exits when it should and not when it souldn't
+
+        // Test the process input function for who is the ruler
+
+        // Test the process input function for who are the allies
+
+        // Test the process input function for a custom input scenario
+
+        // Test Kingdom's SendMessage function
+
+        // Test Kingdom's AccepAlliance function
+
+        // Test Kingdom's BreakAlliances function
     }
 }
