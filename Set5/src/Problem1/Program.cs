@@ -8,11 +8,14 @@ namespace Problem1
     {
         static void Main()
         {
+            // Create new ConsoleMethods object
+            var consoleMethods = new ConsoleMethods();
+
             // Create BreakerOfChains object
             var aGoldenCrown = new AGoldenCrown();
 
             // Initialize game engine
-            var mGameEngine = new GameEngine()
+            var mGameEngine = new GameEngine(consoleMethods)
             {
                 CustomInputValidator = aGoldenCrown.AGoldenCrownValidator,
                 CustomInputAction = aGoldenCrown.AGoldenCrownAction

@@ -6,10 +6,10 @@ namespace Engine
 {
     public static class Utility
     {
-        private static string[] ones = new string[] { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine" };
-        private static string[] teens = new string[] { "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
-        private static string[] tens = new string[] { "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
-        private static string[] thousandsGroups = { "", " Thousand", " Million", " Billion" };
+        private static readonly string[] ones = new string[] { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine" };
+        private static readonly string[] teens = new string[] { "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+        private static readonly string[] tens = new string[] { "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
+        private static readonly string[] thousandsGroups = { "", " Thousand", " Million", " Billion" };
 
         #region Error Messages
         public const string InvalidKingdomMessage = "'{0}' isn't a know kingdom from this realm.";
@@ -28,14 +28,12 @@ namespace Engine
             // Read the list of messages
             listOfMessages = new List<string>();
             var resourceName = "Engine.Engine.Resources.messages.txt";
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+            using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+            using StreamReader reader = new StreamReader(stream);
+            string line;
+            while ((line = reader.ReadLine()) != null)
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    listOfMessages.Add(line);
-                }
+                listOfMessages.Add(line);
             }
         }
 

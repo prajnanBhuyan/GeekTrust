@@ -19,6 +19,7 @@ namespace Engine
 
     public class GameEngine : IGameEngine, ISoutheros
     {
+        public IConsoleMethods console;
         public static readonly Dictionary<Kingdoms, string> Emblems = new Dictionary<Kingdoms, string>()
         {
             {Kingdoms.Space, "gorilla" },
@@ -34,8 +35,11 @@ namespace Engine
         public Func<string, bool> CustomInputValidator { get; set; }
         public Func<string, ISoutheros, string> CustomInputAction { get; set; }
 
-        public GameEngine()
+        public GameEngine(IConsoleMethods consoleMethods)
         {
+            // Using consoleMethos instead of directly using System.Console
+            this.console = consoleMethods;
+
             // Initialise dictionary with all available kingdoms
             AllKingdoms = new Dictionary<Kingdoms, Kingdom>();
             foreach (Kingdoms kingdom in Enum.GetValues(typeof(Kingdoms)))
@@ -61,11 +65,11 @@ namespace Engine
             string input, output;
 
             // Keep reading input from the user unit they enter "exit"
-            while (!(input = Console.ReadLine().Trim().ToLower()).Contains("exit"))
+            while (!(input = console.ReadLine().Trim().ToLower()).Contains("exit"))
             {
                 output = ProcessInput(input);
 
-                if (!string.IsNullOrWhiteSpace(output)) Console.WriteLine(output);
+                if (!string.IsNullOrWhiteSpace(output)) console.WriteLine(output);
             }
         }
 
@@ -103,6 +107,19 @@ namespace Engine
             }
 
             return output;
+        }
+    }
+
+    public class ConsoleMethods : IConsoleMethods
+    {
+        public void WriteLine(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        public string ReadLine()
+        {
+            return Console.ReadLine();
         }
     }
 }

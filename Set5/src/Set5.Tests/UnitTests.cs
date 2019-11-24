@@ -9,16 +9,41 @@ using Engine.Interfaces;
 
 namespace Set5.Tests
 {
+    class TestConsoleMethods : IConsoleMethods
+    {
+        public string SimulatedInput { private get; set; }
+        public string SimulatedOutput { get; private set; }
+
+        public void WriteLine(string message)
+        {
+            SimulatedOutput = message;
+        }
+
+        public string ReadLine()
+        {
+            return SimulatedInput;
+        }
+    }
+
+
     [TestFixture]
     public class Problem1Tests
     {
+        TestConsoleMethods consoleMethods;
+
+        [OneTimeSetUp]
+        public void Problem1TestsInitialise()
+        {
+            consoleMethods = new TestConsoleMethods();
+        }
+
         // The only competing kingdom as per the problem is the SpaceKingdom. This should 
         // be the same as the value in AGoldenCrownAction for valid testing
-        Kingdoms competingKingdom = Kingdoms.Space;
+        readonly Kingdoms competingKingdom = Kingdoms.Space;
         // Required right to rule is the number of kingdoms the competingKingdom kingdom
         // needs to be allied with in order to be crowned as the ruler. This too should 
         // be the same as the value in AGoldenCrownAction for valid testing
-        int reqRightToRule = 3;
+        readonly int reqRightToRule = 3;
 
         public static IEnumerable<TestCaseData> InputDataValidFormat()
         {
@@ -99,7 +124,7 @@ namespace Set5.Tests
         {
             // Arrange
             var aGoldenCrown = new AGoldenCrown();
-            var testGameEngine = new GameEngine();
+            var testGameEngine = new GameEngine(consoleMethods);
             input = string.Format(input, invalidKingdomName);
             var expected = string.Format(Utility.InvalidKingdomMessage, invalidKingdomName);
 
@@ -132,7 +157,7 @@ namespace Set5.Tests
         {
             // Arrange
             var aGoldenCrown = new AGoldenCrown();
-            var testGameEngine = new GameEngine();
+            var testGameEngine = new GameEngine(consoleMethods);
             // we cure the input as the user input is being converted to lower and 
             // trimmed when being read from the console in the actual application
             input = input.ToLower().Trim();
@@ -165,7 +190,7 @@ namespace Set5.Tests
         {
             // Arrange
             var aGoldenCrown = new AGoldenCrown();
-            var testGameEngine = new GameEngine();
+            var testGameEngine = new GameEngine(consoleMethods);
             // we cure the input as the user input is being converted to lower and 
             // trimmed when being read from the console in the actual application
             input = input.ToLower().Trim();
@@ -187,7 +212,7 @@ namespace Set5.Tests
         {
             // Arrange
             var aGoldenCrown = new AGoldenCrown();
-            var testGameEngine = new GameEngine();
+            var testGameEngine = new GameEngine(consoleMethods);
             var listOfKingdoms = new List<Kingdoms>(reqRightToRule)
             {
                 // Enter an reqRightToRule number of valid enums here
@@ -208,19 +233,15 @@ namespace Set5.Tests
     }
 
 
-
     [TestFixture]
     public class Problem2Tests
     {
-        // Since the BreakerOfChains reads user input at one point, we override that
-        // specific function in this derived class so as to test other functionalities
-        private class BreakerOfChainsTest : BreakerOfChains
+        // Since the FindRulerByBallot function in the BreakerOfChains class is protected
+        // we create a public method in this derived class so as to test its functionalities
+        private class BreakerOfChainsTester : BreakerOfChains
         {
-            public string SimulatedInput;
-
-            protected override string[] GetPotentialCandidates()
+            public BreakerOfChainsTester(IConsoleMethods consoleMethods) : base(consoleMethods)
             {
-                return SimulatedInput.Trim().Replace(',', ' ').Split(" ", StringSplitOptions.RemoveEmptyEntries);
             }
 
             public bool FindRulerByBallotCaller(ISoutheros southeros, int maxRounds, int messagesToChoose)
@@ -228,6 +249,15 @@ namespace Set5.Tests
                 return base.FindRulerByBallot(southeros, maxRounds, messagesToChoose);
             }
         }
+        
+        TestConsoleMethods consoleMethods;
+
+        [OneTimeSetUp]
+        public void Problem2TestsInitialise()
+        {
+            consoleMethods = new TestConsoleMethods();
+        }
+
 
         public static IEnumerable<TestCaseData> InputDataValidFormat()
         {
@@ -245,7 +275,7 @@ namespace Set5.Tests
         public void When_ValidInput_Expect_True(string input)
         {
             // Arrange
-            var breakerOfChains = new BreakerOfChains();
+            var breakerOfChains = new BreakerOfChains(consoleMethods);
             // we cure the input as the user input is being converted to lower and 
             // trimmed when being read from the console in the actual application
             input = input.ToLower().Trim();
@@ -275,7 +305,7 @@ namespace Set5.Tests
         public void When_InvalidInput_Expect_False(string input)
         {
             // Arrange
-            var breakerOfChains = new BreakerOfChains();
+            var breakerOfChains = new BreakerOfChains(consoleMethods);
             // we cure the input as the user input is being converted to lower and 
             // trimmed when being read from the console in the actual application
             input = input.ToLower().Trim();
@@ -301,11 +331,12 @@ namespace Set5.Tests
         public void When_NoCompetitor_Expect_NoCompetitorMessage(string input)
         {
             // Arrange
-            var testGameEngine = new GameEngine();
+            var testGameEngine = new GameEngine(consoleMethods);
             // we cure the input as the user input is being converted to lower and 
             // trimmed when being read from the console in the actual application
             input = input.ToLower().Trim();
-            var breakerOfChains = new BreakerOfChainsTest() { SimulatedInput = input };
+            consoleMethods.SimulatedInput = input;
+            var breakerOfChains = new BreakerOfChains(consoleMethods);
 
             // Act
             var actual = breakerOfChains.BreakerOfChainsAction(input, testGameEngine);
@@ -322,8 +353,9 @@ namespace Set5.Tests
         public void When_AllCompeting_Expect_AllCompetingMessage()
         {
             // Arrange
-            var testGameEngine = new GameEngine();
-            var breakerOfChains = new BreakerOfChainsTest() { SimulatedInput = string.Join(" ", Enum.GetNames(typeof(Kingdoms))) };
+            var testGameEngine = new GameEngine(consoleMethods);
+            consoleMethods.SimulatedInput = string.Join(" ", Enum.GetNames(typeof(Kingdoms)));
+            var breakerOfChains = new BreakerOfChains(consoleMethods);
 
             // Act
             var actual = breakerOfChains.BreakerOfChainsAction(string.Empty, testGameEngine);
@@ -352,11 +384,12 @@ namespace Set5.Tests
         public void When_OneValidOneInvalid_Expect_InvalidAndTooFewMessage(string input)
         {
             // Arrange
-            var testGameEngine = new GameEngine();
+            var testGameEngine = new GameEngine(consoleMethods);
             // we cure the input as the user input is being converted to lower and 
             // trimmed when being read from the console in the actual application
             input = input.ToLower().Trim();
-            var breakerOfChains = new BreakerOfChainsTest() { SimulatedInput = input };
+            consoleMethods.SimulatedInput = input;
+            var breakerOfChains = new BreakerOfChains(consoleMethods);
             var invalidKingdom = input.Split(' ')[1];
             var expected = string.Format(Utility.InvalidKingdomMessage, invalidKingdom);
             expected += Utility.NoCompetingKingdomsMessage;
@@ -387,11 +420,12 @@ namespace Set5.Tests
         public void When_ValidKingdoms_Expect_RulerCrowned(string input)
         {
             // Arrange
-            var testGameEngine = new GameEngine();
+            var testGameEngine = new GameEngine(consoleMethods);
             // we cure the input as the user input is being converted to lower and 
             // trimmed when being read from the console in the actual application
             input = input.ToLower().Trim();
-            var breakerOfChains = new BreakerOfChainsTest() { SimulatedInput = input };
+            consoleMethods.SimulatedInput = input;
+            var breakerOfChains = new BreakerOfChains(consoleMethods);
 
             // Act
             var actual = breakerOfChains.BreakerOfChainsAction(string.Empty, testGameEngine);
@@ -416,13 +450,13 @@ namespace Set5.Tests
         public void When_RoundsExceed_Expect_NoRuler(int maxRounds)
         {
             // Arrange
-            var testGameEngine = new GameEngine();
+            var testGameEngine = new GameEngine(consoleMethods);
             testGameEngine.AllKingdoms[Kingdoms.Air].IsCompeting = true;
             testGameEngine.AllKingdoms[Kingdoms.Ice].IsCompeting = true;
             var messagesToChoose = 6;
             Utility.listOfMessages.Clear();
             Utility.listOfMessages.Add("123456789");
-            var breakerOfChains = new BreakerOfChainsTest();
+            var breakerOfChains = new BreakerOfChainsTester(consoleMethods);
 
             // Act
             var actual = breakerOfChains.FindRulerByBallotCaller(testGameEngine, maxRounds, messagesToChoose);
@@ -443,8 +477,8 @@ namespace Set5.Tests
             // Arrange
             var maxRounds = 100;
             var messagesToChoose = 0;
-            var testGameEngine = new GameEngine();
-            var breakerOfChains = new BreakerOfChainsTest();
+            var testGameEngine = new GameEngine(consoleMethods);
+            var breakerOfChains = new BreakerOfChainsTester(consoleMethods);
 
             // Assert
             var ex = Assert.Throws<ArgumentException>(() => breakerOfChains.FindRulerByBallotCaller(testGameEngine, maxRounds, messagesToChoose));
@@ -456,6 +490,15 @@ namespace Set5.Tests
 
     public class EngineAndModelTests
     {
+        TestConsoleMethods consoleMethods;
+
+        [OneTimeSetUp]
+        public void EngineAndModelTestsInitialise()
+        {
+            consoleMethods = new TestConsoleMethods();
+        }
+
+
         // Check engine constructor error for emblem
 
         // Test Execute function exits when it should and not when it souldn't

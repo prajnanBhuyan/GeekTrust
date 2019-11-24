@@ -2,7 +2,7 @@
 My solution to the GeekTrust backend problem set Tame of Thromes. This is a C# solution containing two seperate console application for the two seperate problems in the problem set. Both the console applications run on the same engine.
 
 ## Solution status
-![](https://github.com/prajnanBhuyan/GeekTrust/workflows/Set%205%20Build%20and%20Test/badge.svg)
+[![Actions Status](https://github.com/prajnanBhuyan/GeekTrust/workflows/Set%205%20Build%20and%20Test/badge.svg)](https://github.com/prajnanBhuyan/GeekTrust/actions?query=workflow%3A%22Set+5+Build+and+Test%22)
 
 ## Framework used
 - [.NET Core 3](https://dotnet.microsoft.com/download/dotnet-core/3.0) to create the application 

@@ -10,11 +10,14 @@ namespace Problem2
     {
         static void Main()
         {
+            // Create new ConsoleMethods object
+            var consoleMethods = new ConsoleMethods();
+
             // Create BreakerOfChains object
-            var breakerOfChains = new BreakerOfChains();
+            var breakerOfChains = new BreakerOfChains(consoleMethods);
 
             // Initialize game engine
-            var mGameEngine = new GameEngine()
+            var mGameEngine = new GameEngine(consoleMethods)
             {
                 CustomInputValidator = breakerOfChains.BreakerOfChainsValidator,
                 CustomInputAction = breakerOfChains.BreakerOfChainsAction
@@ -27,6 +30,14 @@ namespace Problem2
 
     public class BreakerOfChains
     {
+        // Using consoleMethos instead of directly using System.Console
+        public IConsoleMethods console;
+
+        public BreakerOfChains(IConsoleMethods consoleMethods)
+        {
+            this.console = consoleMethods;
+        }
+
         /// <summary>
         /// Custom Input Parser for the 'Breaker of Chains' problem
         /// </summary>
@@ -40,9 +51,10 @@ namespace Problem2
         /// <summary>
         /// Custom Input Action for the 'Breaker of Chains' problem
         /// </summary>
-        /// <param name="input">The user input</param>
+        /// <param name="input">The user input which triggered the custom action</param>
         /// <param name="southeros"></param>
         /// <returns></returns>
+        /// <remarks>We don't particularly require the input data in this function but we keep it anyway to match the function signature</remarks>
         public string BreakerOfChainsAction(string input, ISoutheros southeros)
         {
             // Once a ruler has been found, we no longer need to hold a ballot
@@ -56,7 +68,7 @@ namespace Problem2
             var messagesToChoose = 6;
 
             // Read the list of competitors from the user
-            var possibleCandidates = GetPotentialCandidates();
+            var possibleCandidates = console.ReadLine().Trim().Replace(',', ' ').Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
             // Try parsing the user input into valid kingdoms
             foreach (var candidate in possibleCandidates)
@@ -89,15 +101,6 @@ namespace Problem2
         }
 
         /// <summary>
-        /// Reads a list of space or comma delimited kingdoms from the user
-        /// </summary>
-        /// <returns>A list of space or comma delimited kingdoms</returns>
-        protected virtual string[] GetPotentialCandidates()
-        {
-            return Console.ReadLine().Trim().Replace(',', ' ').Split(" ", StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        /// <summary>
         /// Finds the ruler of Southeros using a ballot system
         /// </summary>
         /// <param name="southeros"></param>
@@ -107,7 +110,7 @@ namespace Problem2
         protected bool FindRulerByBallot(ISoutheros southeros, int maxRounds, int messagesToChoose)
         {
             // Verify arguments passed
-            if (messagesToChoose < 1) throw new ArgumentException(Utility.InvalidMessagesToChoose, "messagesToChoose");
+            if (messagesToChoose < 1) throw new ArgumentException(Utility.InvalidMessagesToChoose, nameof(messagesToChoose));
 
             //Ballot round
             int round = 0;
@@ -156,7 +159,7 @@ namespace Problem2
                 }
 
                 // Declare results
-                Console.WriteLine($"Results after round {Utility.IntegerToWritten(round)} ballot count");
+                console.WriteLine($"Results after round {Utility.IntegerToWritten(round)} ballot count");
 
                 // Variable to store max allies by any kingdom
                 var maxAllies = 0;
@@ -165,7 +168,7 @@ namespace Problem2
                 {
                     var allyCount = southeros.AllKingdoms[competitor].Allies.Count;
 
-                    Console.WriteLine($"Allies for {competitor} : {allyCount}");
+                    console.WriteLine($"Allies for {competitor} : {allyCount}");
 
                     maxAllies = allyCount > maxAllies ? allyCount : maxAllies;
                 }
@@ -175,11 +178,11 @@ namespace Problem2
 
 #if DEBUG
                 // Verbose output to help in Debug mode
-                Console.WriteLine($"MaxAllies: {maxAllies}");
-                Console.WriteLine($"Tied Kingdoms: {string.Join(", ", leadingKingdoms.Select(k => $"{k.Key} ({k.Value.Allies.Count})"))}");
+                console.WriteLine($"MaxAllies: {maxAllies}");
+                console.WriteLine($"Tied Kingdoms: {string.Join(", ", leadingKingdoms.Select(k => $"{k.Key} ({k.Value.Allies.Count})"))}");
                 foreach (var kv in leadingKingdoms)
                 {
-                    Console.WriteLine($"Allies of {kv.Key}: {(string.Join(", ", kv.Value.Allies))}");
+                    console.WriteLine($"Allies of {kv.Key}: {(string.Join(", ", kv.Value.Allies))}");
                 }
 #endif
 
