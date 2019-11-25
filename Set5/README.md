@@ -1,31 +1,31 @@
 ## Tame of Thrones
-My solution to the GeekTrust backend problem set Tame of Thromes. This is a C# solution containing a single console application for the two seperate problems in the problem set. The user can specify which problem they wish to run by specifying it as a parameter to the console (examples below).
+My solution to the GeekTrust backend problem set, Tame of Thromes. This is a C# solution containing a single console application for the two seperate problems in the problem set. The user can specify which problem they wish to run by specifying it as a parameter to the console (examples below).
 
 The console application was built using .NET Core 3 and runs on both Windows and Linux.
 
 ## Solution status
 [![Actions Status](https://github.com/prajnanBhuyan/GeekTrust/workflows/Set%205%20Build%20and%20Test/badge.svg)](https://github.com/prajnanBhuyan/GeekTrust/actions?query=workflow%3A%22Set+5+Build+and+Test%22)
 
-## Framework used
-- [.NET Core 3](https://dotnet.microsoft.com/download/dotnet-core/3.0) to create the application 
-- [Cake Build](https://cakebuild.net/) to create the build scripts
+## Prerequisites
 
-## Installation
-TODO: Add a definite list of prerequisites withh download links
+You need to have [.NET Core v3.0.0](https://dotnet.microsoft.com/download/dotnet-core/3.0) installed on your system in order to build and run the application.
 
-Prerequisites:
-[.NET Core 3](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+## Build Application
+Use one of the two build scripts  without any paramters to Clean, Build, Test and then Publish the application into a 'Published' folder:<br>
+ - [`build.ps1`][build_windows] on Windows<br>
+ - [`build.sh`][build_ubuntu] on Ubuntu
 
 ## Tests
-TODO: Describe how to run tests using build script/vstest.console.exe/mstest.exe
-.\build.ps1 -Target Test
+Use the `dotnet` cli's `test` command to run the tests present in the solution.<br>
+Run ```dotnet test --help``` for more information.
+
 
 ## How to run?
 TODO: Add detail about how to run the application
-Using the build scripts:
+Clean, build and run tests using the build scripts:
 .\build.ps1 with no parameters to Clean, Restore NuGet, Build and run Tests
 
-dotnet TameOfThrones.dll problem2
+```D:\GeekTrust\Set5\src\Build\Published>TameOfThrones.exe Problem1```
 
 ## Sample Input and Output
 TODO: Add sample input output from the terminal
@@ -74,3 +74,8 @@ TODO: Re-arrange, categorise and expand on assumtions if needed
 4. Once a message is sent out, the high priest burns it in the holy flame so as to not send it out a second time by mistake.
 
 5. If three or more competing kingdoms are entered and one of them is invalid, the ballot process is conducted between between the two or more more valid kingdoms.
+
+
+
+[build_ubuntu]: https://github.com/prajnanBhuyan/GeekTrust/blob/master/Set5/build.sh
+[build_windows]: https://github.com/prajnanBhuyan/GeekTrust/blob/master/Set5/build.ps1
