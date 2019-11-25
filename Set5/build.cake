@@ -2,16 +2,18 @@ var target = Argument ("target", "Default");
 
 var slnPath = "./src/Set5.sln";
 var compiledPath = "./src/Build/Compiled/";
+var publishedPath = "./src/Build/Published/";
 var enginePath = "./src/Engine/Engine.csproj";
 var consolePath = "./src/TameOfThrones/TameOfThrones.csproj";
 var testPath = "./src/TameOfThrones.Tests/TameOfThrones.Tests.csproj";
-var compiledTestsPath = $"{compiledPath}/TameOfThrones.Tests.dll";
+var compiledTestsPath = $"./src/Build/Compiled/TameOfThrones.Tests.dll";
 
-Task ("Default")
+Task("Default")
     .IsDependentOn("Clean")
     .IsDependentOn ("RestoreNuGet")
     .IsDependentOn ("Build")
-    .IsDependentOn ("Test");
+    .IsDependentOn ("Test")
+    .IsDependentOn ("Publish");
 
 Task("Clean")
     .Does(() => {
@@ -38,9 +40,20 @@ Task("Build")
         DotNetCoreBuild(slnPath, settings);
     });
 
-Task ("Test")
+Task("Test")
     .Does (() => {
-        DotNetCoreTest(testPath);
+        DotNetCoreVSTest(compiledTestsPath);
+    });
+
+Task("Publish")
+    .Does(() => {
+        var settings = new DotNetCorePublishSettings
+        {
+            Framework = "netcoreapp3.0",
+            Configuration = "Release",
+            OutputDirectory = publishedPath
+        };
+        DotNetCorePublish(consolePath, settings);
     });
 
 RunTarget (target);
