@@ -25,8 +25,42 @@ TODO: Add detail about how to run the application
 Using the build scripts:
 .\build.ps1 with no parameters to Clean, Restore NuGet, Build and run Tests
 
+dotnet TameOfThrones.dll problem2
+
 ## Sample Input and Output
 TODO: Add sample input output from the terminal
+
+```
+Who is the ruler of Southeros?
+None
+Allies of Ruler?
+None
+Enter the kingdoms competing to be the ruler:
+ice air fire water land
+Results after round One ballot count
+Allies for Land : 0
+Allies for Water : 0
+Allies for Ice : 0
+Allies for Air : 0
+Allies for Fire : 0
+Results after round Two ballot count
+Allies for Land : 0
+Allies for Water : 0
+Allies for Ice : 0
+Allies for Air : 0
+Allies for Fire : 0
+...
+Results after round Sixteen ballot count
+Allies for Land : 1
+Allies for Water : 0
+Allies for Ice : 0
+Allies for Air : 0
+Allies for Fire : 0
+Who is the ruler of Southeros?
+Land
+Allies of Ruler?
+Space
+```
 
 ## Assumptions:
 TODO: Re-arrange, categorise and expand on assumtions if needed

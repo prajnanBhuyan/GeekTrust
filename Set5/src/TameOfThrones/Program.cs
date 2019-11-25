@@ -17,7 +17,7 @@ namespace TameOfThrones
             {
                 // Create SimpleProblemFactory object
                 var simpleProblemFactory = new SimpleProblemFactory();
-                var problem = args[0];
+                var problem = args[0].Trim().ToLower();
 
                 // Create variable to hold customGameObject
                 ICustomGameObject gameObject;
@@ -45,7 +45,7 @@ namespace TameOfThrones
             else
             {
                 consoleMethods.WriteLine("Please specify which problem you wish to execute.");
-                consoleMethods.WriteLine("Usage: TameOfThrones.dll <Problem1|Problem2>");
+                consoleMethods.WriteLine("Usage: dotnet TameOfThrones.dll <Problem1|Problem2>");
             }
         }
     }
