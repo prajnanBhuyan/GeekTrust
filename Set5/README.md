@@ -1,5 +1,5 @@
-# Tame of Thrones
-My solution to the GeekTrust backend problem set, Tame of Thromes. This is a C# solution containing a single console application for the two seperate problems in the problem set. The user can specify which problem they wish to run by specifying it as a parameter to the console (examples below).
+# Tame of Thrones :crossed_swords:
+My solution to the GeekTrust backend problem set, Tame of Thrones. This is a C# solution containing a single console application for the two separate problems in the problem set. The user can specify which problem they wish to run by specifying it as a parameter to the console (examples below).
 
 The console application was built using .NET Core 3 and runs on both Windows and Linux.
 
@@ -19,7 +19,7 @@ You need to have [.NET Core v3.0.0](https://dotnet.microsoft.com/download/dotnet
 
 
 ## Building the Application
-Use one of the two build scripts  without any paramters to Clean, Build, Test and then Publish the application into a 'Published' folder:<br>
+Use one of the two build scripts  without any parameters to Clean, Build, Test and then Publish the application into a 'Published' folder:<br>
  - [`build.ps1`][build_windows] on Windows<br>
  - [`build.sh`][build_ubuntu] on Ubuntu
 
@@ -33,7 +33,7 @@ Run ```dotnet test --help``` for more information.
 
 ## Running the Application
 
-After running one of the build scripts you can head to the _Published_ directory to run the application. The console application expects the user to enter wihch problem they wish to run as a parameter. The valid values are **Problem1** and **Problem2** (case insensetive)
+After running one of the build scripts you can head to the _Published_ directory to run the application. The console application expects the user to enter which problem they wish to run as a parameter. The valid values are **Problem1** and **Problem2** (case-insensitive)
 
 ### Windows
 
@@ -87,7 +87,7 @@ In Problem 1, A Golden Crown, the user can send a message to another kingdom at 
 ```
 
 i.e. at the very least, it should contain a valid kingdom name, followed by a message of length greater than zero enclosed by double quotes on both ends.<br>
-The *recipient_kingdom* and the *message_text* can be seperated by one or more whitespace character ` ` or comma ` `
+The *recipient_kingdom* and the *message_text* can be separated by one or more whitespace character ` ` or comma `,`
 
 These are all valid inputs to send a message:
 - Fire, "Drag on Martin!"
@@ -103,15 +103,17 @@ On reading an input contain both of the phrases, for example:
 ```
 Enter the kingdoms competing to be the ruler:
 ```
-The application wait for the user to enter the kingdoms that will be competing for the throne **seperated by *space*** (as we shown in the sample input output for the problem)
+The application wait for the user to enter the kingdoms that will be competing for the throne **separated by *space*** (as we shown in the sample input output for the problem)
 
+### Exiting the application
+Enter `exit` (case-insensitive) at any given time to exit the application.
 
 
 ## Sample Input and Output
 
 ### Problem 1
 
-``` Batchfile
+```
 Who is the ruler of Southeros?
 None
 Allies of Ruler?
@@ -146,7 +148,7 @@ King Shan
 
 ### Problem 2
 
-``` Batchfile
+```
 Who is the ruler of Southeros?
 None
 Allies of Ruler?
@@ -179,21 +181,19 @@ Space
 ```
 
 ## Assumptions:
-TODO: Re-arrange, categorise and expand on assumtions if needed
-1. The other kingdoms simply ignore any future messages sent to them once they recieve their first message. This behavious can be easily changed so as to mimic kingdoms getting offended on not having their emblem in the message and breaking off alliances that were already in place.
 
-2. Set a limit for the ballot rounds so that in an unfortunate event we don't go on going forever.
+1. Limited to the number of times the ballot process is repeated so that it does not go on forever in the practically impossible, but statistically possible, scenario.
 
-3. A competing kingdom WILL compose a message for another competing kingdom and can posibbly be one of the 6 that the high priest decides to send out as understood by point 2 of **Rules to decide allegiance by a kingdom**:
+2. A competing kingdom WILL compose a message for another competing kingdom and can possibly be one of the 6 that the high priest decides to send out as understood by point 2 of **Rules to decide allegiance by a kingdom**:
     *If the receiving kingdom is competing to be the ruler, they will not give their allegiance even if the message they received is correct.*
 
-4. Once a message is sent out, the high priest burns it in the holy flame so as to not send it out a second time by mistake.
+3. Once a message is sent out, the high priest burns it in the holy flame so as to not send it out a second time by mistake.
 
-5. If three or more competing kingdoms are entered and one of them is invalid, the ballot process is conducted between between the two or more more valid kingdoms.
+4. If three or more competing kingdoms are entered and one of them is invalid, the ballot process is conducted between between the two or more more valid kingdoms.
 
-6. The ballot process does not start without atleast 2 kingdoms participating.
+5. The ballot process does not start without at least 2 kingdoms participating.
 
-7. The kingdoms go to war and the ballot is not conducted if all 6 kingdoms try to take part in the process.
+6. The kingdoms go to war and the ballot is not conducted if all 6 kingdoms try to take part in the process.
 
 
 
