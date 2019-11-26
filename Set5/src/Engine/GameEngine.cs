@@ -64,12 +64,14 @@ namespace Engine
         /// <remarks>It will keep reading input from the user until they type exit</remarks>
         public void Execute()
         {
-            // Variables to store input and output from the user
-            string input, output = string.Empty;
+            // Variable to store the input
+            string input;
 
             // Keep reading input from the user unit they enter "exit"
             while (!(input = console.ReadLine().Trim().ToLower()).Contains("exit"))
             {
+                // Variable to store the output from the user
+                var output = string.Empty;
                 if (!string.IsNullOrWhiteSpace(input))
                     output = ProcessInput(input);
 

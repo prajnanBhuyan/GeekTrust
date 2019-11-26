@@ -15,6 +15,11 @@ dotnet clean -c 'Release' ./src/Set5.sln
 
 printf '\n'
 printf '\n'
+write_header "RESTORE"
+dotnet restore ./src/Set5.sln
+
+printf '\n'
+printf '\n'
 write_header "BUILD"
 dotnet build -c 'Release' ./src/Set5.sln
 

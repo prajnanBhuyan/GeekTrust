@@ -12,6 +12,10 @@ Write-Header("CLEAN")
 dotnet clean -c 'Release' ./src/Set5.sln
 
 Write-Host "`n"
+Write-Header("RESTORE")
+dotnet restore ./src/Set5.sln
+
+Write-Host "`n"
 Write-Header("BUILD")
 dotnet build -c 'Release' ./src/Set5.sln
 
@@ -25,4 +29,4 @@ dotnet publish -o ./src/Build/Published -c 'Release' ./src/TameOfThrones/TameOfT
 
 $exePath = Resolve-Path -Path ".\src\Build\Published\TameOfThrones.exe"
 
-Write-Host "`nExecutable can be found at: $exePath" -ForegroundColor DarkGreen
+Write-Host "`nExecutable can be found at: $exePath" -ForegroundColor Green
