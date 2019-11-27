@@ -86,7 +86,7 @@ In Problem 1, A Golden Crown, the user can send a message to another kingdom at 
 <recipient_kingdom>"<message_text>"
 ```
 
-i.e. at the very least, it should contain a valid kingdom name, followed by a message of length greater than zero enclosed by double quotes on both ends.<br>
+i.e. at the very least, it should contain a valid kingdom name, followed by a message of length greater than zero enclosed by double quotes on both ends. Any text after the last double quote will simply be disregarded.<br>
 The *recipient_kingdom* and the *message_text* can be separated by one or more whitespace character ` ` or comma `,`
 
 These are all valid inputs to send a message:
@@ -94,7 +94,6 @@ These are all valid inputs to send a message:
 - Fire "Drag on Martin!"
 - Fire,"Drag on Martin!"
 - Fire"Drag on Martin!"
-- Fire,   "Drag on Martin!"
 - Fire,,, "Drag   " on "   Martin!"
 
 ### Entering competing kingdoms<br>
@@ -103,11 +102,12 @@ On reading an input contain both of the phrases, for example:
 ```
 Enter the kingdoms competing to be the ruler:
 ```
-The application wait for the user to enter the kingdoms that will be competing for the throne **separated by *space*** (as we shown in the sample input output for the problem)
+The application waits for the user to enter the kingdoms that will be competing for the throne **separated by *space*** (as we shown in the sample input output for the problem)
 
 ### Exiting the application
 Enter `exit` (case-insensitive) at any given time to exit the application.
 
+_Note: If the user enters keywords belonging to more than one interaction type in a single message, the application will give precedence in the same order as specified above, except for 'exit' which always has the highest precedence_
 
 ## Sample Input and Output
 
@@ -182,7 +182,7 @@ Space
 
 ## Assumptions:
 
-1. Limited to the number of times the ballot process is repeated so that it does not go on forever in the practically impossible, but statistically possible, scenario.
+1. Limited to the number of times the ballot process is repeated so that it does not go on forever in a practically impossible, but statistically possible, scenario.
 
 2. A competing kingdom WILL compose a message for another competing kingdom and can possibly be one of the 6 that the high priest decides to send out as understood by point 2 of **Rules to decide allegiance by a kingdom**:
     *If the receiving kingdom is competing to be the ruler, they will not give their allegiance even if the message they received is correct.*

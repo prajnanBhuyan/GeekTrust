@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Engine.Factory
 {
@@ -42,7 +41,7 @@ namespace Engine.Factory
             // Declare local variables
             var output = string.Empty;
             var noOfCompetitors = 0;
-            var maxBallotRounds = 100;
+            var maxBallotRounds = 1000;
             var messagesToChoose = 6;
 
             // Read the list of competitors from the user

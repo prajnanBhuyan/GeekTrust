@@ -2,6 +2,7 @@
 using Engine.Factory;
 using Engine.Interfaces;
 using System;
+using System.Runtime.InteropServices;
 
 namespace TameOfThrones
 {
@@ -45,7 +46,7 @@ namespace TameOfThrones
             else
             {
                 consoleMethods.WriteLine("Please specify which problem you wish to execute.");
-                consoleMethods.WriteLine("Usage: dotnet TameOfThrones.dll <Problem1|Problem2>");
+                consoleMethods.WriteLine($"Usage: TameOfThrones{(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty)} [Problem1|Problem2]");
             }
         }
     }

@@ -12,13 +12,13 @@ namespace Engine
         private static readonly string[] thousandsGroups = { "", " Thousand", " Million", " Billion" };
 
         #region Error Messages
-        public const string InvalidKingdomMessage = "'{0}' isn't a know kingdom from this realm.";
-        public const string TooManyKingdomsMessage = "Alas! All the kingdoms wanted the thone for themselves and The High Priest couldn't stop the war.";
-        public const string BallotTookTooLongMessage = "Alas! The process took too long the the kings grew weary. The battle could not be avoided.";
-        public const string NoCompetingKingdomsMessage = "Atleast two kingdoms need to be competing to use the ballott system to decide a ruler.";
-        public const string EmblemNotDefinedMessage = "Looks like the game dev forgot to add an emblem for the {0} kingdom";
-        public const string RulerCrownedMessage = "{0} has already been crowned as the ruler.";
-        public const string InvalidMessagesToChoose = "The number of messages to be choosen by the high priest should be more than 1";
+        public const string InvalidKingdomMessage = "'{0}' isn't a know kingdom from this realm. ";
+        public const string TooManyKingdomsMessage = "Alas! All the kingdoms wanted the throne for themselves and The High Priest couldn't stop the war. ";
+        public const string BallotTookTooLongMessage = "Alas! The process took too long the the kings grew weary. The battle could not be avoided. ";
+        public const string NoCompetingKingdomsMessage = "Atleast two kingdoms need to be competing to use the ballott system to decide a ruler. ";
+        public const string EmblemNotDefinedMessage = "Looks like the game dev forgot to add an emblem for the {0} kingdom. ";
+        public const string RulerCrownedMessage = "{0} has already been crowned as the ruler. ";
+        public const string InvalidMessagesToChoose = "The number of messages to be choosen by the high priest should be more than 1. ";
         #endregion
 
         public static List<string> listOfMessages;
