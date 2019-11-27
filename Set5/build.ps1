@@ -13,7 +13,7 @@ dotnet clean -c 'Release' ./src/Set5.sln
 
 Write-Host "`n"
 Write-Header("RESTORE")
-dotnet restore ./src/Set5.sln
+dotnet restore -s https://api.nuget.org/v3/index.json ./src/Set5.sln
 
 Write-Host "`n"
 Write-Header("BUILD")

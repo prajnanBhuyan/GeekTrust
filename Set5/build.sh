@@ -16,7 +16,7 @@ dotnet clean -c 'Release' ./src/Set5.sln
 printf '\n'
 printf '\n'
 write_header "RESTORE"
-dotnet restore ./src/Set5.sln
+dotnet restore -s https://api.nuget.org/v3/index.json ./src/Set5.sln
 
 printf '\n'
 printf '\n'
