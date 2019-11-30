@@ -68,7 +68,7 @@ namespace Engine.Factory
             // and atmost one less than all of them
             else if (noOfCompetitors < Enum.GetValues(typeof(Kingdoms)).Length)
             {
-                //
+                // Summon high priest
                 var highPriest = new HighPriest(messagesToChoose, maxBallotRounds, console);
                 // FindRulerByBallot return false if we don't have a ruler after maxBallotRounds
 

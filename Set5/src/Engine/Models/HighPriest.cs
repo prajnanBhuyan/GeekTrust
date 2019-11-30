@@ -6,11 +6,10 @@ using System.Text;
 
 namespace Engine.Models
 {
-    class HighPriest
+    public class HighPriest
     {
         int messagesToChoose;
         readonly int maxRounds;
-        BallotBox ballotBox;
         // Using consoleMethos instead of directly using System.Console
         // Can easily be update to read from a text file instead
         public IConsoleMethods console;
@@ -26,10 +25,10 @@ namespace Engine.Models
         {
             // messagesToChoose has to be greater than or equal to 1
             if (messagesToChoose < 1)
-                throw new ArgumentException(nameof(messagesToChoose));
+                throw new ArgumentException($"{nameof(messagesToChoose)} should be greater than 0", nameof(messagesToChoose));
             // maxRounds has to be greater than or equal to 1
             if (maxRounds < 1)
-                throw new ArgumentException(nameof(maxRounds));
+                throw new ArgumentException($"{nameof(maxRounds)} should be greater than 0", nameof(maxRounds));
 
             this.messagesToChoose = messagesToChoose;
             this.maxRounds = maxRounds;
@@ -41,7 +40,7 @@ namespace Engine.Models
         /// </summary>
         /// <param name="ballotBox"></param>
         /// <returns></returns>
-        private List<Message> PickRandomMessages()
+        private List<Message> PickRandomMessages(BallotBox ballotBox)
         {
             // In some cases the number of alliance requests might be less 
             // than the number of messages the high priest intended to select
@@ -59,15 +58,10 @@ namespace Engine.Models
         /// <summary>
         /// Finds the ruler of Southeros using a ballot system
         /// </summary>
-        /// <param name="southeros"></param>
-        /// <param name="maxRounds">Maximum number of rounds the ballot can go upto in case of ties</param>
-        /// <param name="messagesToChoose">The number of messages the high priest can choose to send out</param>
+        /// <param name="southeros">Reference to a ISoutheros implemented class object</param>
         /// <returns>Returns a boolean denoting whether a king was crowned or not</returns>
         public bool HoldBallot(ISoutheros southeros)
         {
-            // Get a new ballot box
-            ballotBox = new BallotBox();
-
             // Randomizer to choose message to write
             var rnd = new Random();
 
@@ -78,6 +72,10 @@ namespace Engine.Models
             while (southeros.RulingKingdom == null &&
                     ++round <= maxRounds)
             {
+
+                // Get a new ballot box
+                var ballotBox = new BallotBox();
+
                 // Round up all kingdoms competing for the throne
                 var competingKingdoms = southeros.AllKingdoms.Where(kv => kv.Value.IsCompeting).Select(kv => kv.Key).ToList();
 
@@ -95,7 +93,7 @@ namespace Engine.Models
                 }
 
                 // The High Priest of Southeros chooses the messages to send out
-                var choosenMessages = PickRandomMessages();
+                var choosenMessages = PickRandomMessages(ballotBox);
 
                 // Hand over the messages
                 foreach (var message in choosenMessages)
@@ -121,16 +119,6 @@ namespace Engine.Models
                 // Find the kingdom(s) with the most allies
                 var leadingKingdoms = southeros.AllKingdoms.Where(kv => kv.Value.IsCompeting && kv.Value.Allies.Count == maxAllies);
 
-#if DEBUG
-                // Verbose output to help in Debug mode
-                console.WriteLine($"MaxAllies: {maxAllies}");
-                console.WriteLine($"Tied Kingdoms: {string.Join(", ", leadingKingdoms.Select(k => $"{k.Key} ({k.Value.Allies.Count})"))}");
-                foreach (var kv in leadingKingdoms)
-                {
-                    console.WriteLine($"Allies of {kv.Key}: {(string.Join(", ", kv.Value.Allies))}");
-                }
-#endif
-
                 // If there is a tie
                 if (leadingKingdoms.Count() > 1)
                 {
@@ -138,7 +126,7 @@ namespace Engine.Models
                     competingKingdoms.Clear();
 
                     // Create a new list comprising of the kingdoms there was a tie between
-                    competingKingdoms.AddRange(leadingKingdoms.Select<KeyValuePair<Kingdoms, Kingdom>, Kingdoms>(kv => kv.Key));
+                    competingKingdoms.AddRange(leadingKingdoms.Select(kv => kv.Key));
 
                     // Break all alliances
                     foreach (var kingdom in southeros.AllKingdoms.Values) kingdom.BreakAlliances();

@@ -29,6 +29,7 @@ namespace Engine.Models
         /// Pick a message from the ballot box.
         /// </summary>
         /// <returns>Returns a random message from the ballot box.</returns>
+        /// <exception cref="IndexOutOfRangeException">If called when the ballot box is empty</exception>
         public Message PickMessage()
         {
             // Randomizer to choose which messages gets picked
@@ -48,9 +49,12 @@ namespace Engine.Models
         }
 
         /// <summary>
-        /// Discards all messages currently in the ballotbox.
+        /// Discards all messages currently in the ballot box.
         /// </summary>
-        public void EmptyBallotBox()
+        /// <remarks>Although this function isn't being used right now, it fealt important as
+        /// we have no other means of emptying out the list of messages if we needed to, apart
+        /// from destroying the entire object</remarks>
+        public void DiscardRemaining()
         {
             messages.Clear();
         }
