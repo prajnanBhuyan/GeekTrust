@@ -102,7 +102,7 @@ On reading an input contain both of the phrases, for example:
 ```
 Enter the kingdoms competing to be the ruler:
 ```
-The application waits for the user to enter the kingdoms that will be competing for the throne **separated by *space*** (as we shown in the sample input output for the problem)
+The application waits for the user to enter the kingdoms that will be competing for the throne **separated by *space*** (as was shown in the sample input output for the problem)
 
 ### Exiting the application
 Enter `exit` (case-insensitive) at any given time to exit the application.
