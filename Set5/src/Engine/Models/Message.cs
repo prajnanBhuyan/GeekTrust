@@ -1,6 +1,7 @@
 ﻿namespace Engine
 {
-    public class Message
+    // Changed Message to struct from Class to avoid an Anemic Domain Model
+    public struct Message
     {
         public readonly Kingdoms Sender;
         public readonly Kingdoms Recipient;
