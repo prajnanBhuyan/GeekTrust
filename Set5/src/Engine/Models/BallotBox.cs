@@ -7,7 +7,7 @@ namespace Engine.Models
 {
     class BallotBox
     {
-        private List<Message> messages;
+        private readonly List<Message> messages;
 
         public int Count { get { return messages.Count; } }
 
@@ -20,7 +20,7 @@ namespace Engine.Models
         /// Drop a message into the ballot box
         /// </summary>
         /// <param name="message">The message to be dropped into the ballot box</param>
-        public void PutInMessage(Message message)
+        public void DropMessage(Message message)
         {
             messages.Add(message);
         }
@@ -45,6 +45,14 @@ namespace Engine.Models
 
             // Return message
             return message;
+        }
+
+        /// <summary>
+        /// Discards all messages currently in the ballotbox.
+        /// </summary>
+        public void EmptyBallotBox()
+        {
+            messages.Clear();
         }
     }
 }

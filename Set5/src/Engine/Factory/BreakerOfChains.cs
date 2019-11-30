@@ -1,4 +1,5 @@
 ﻿using Engine.Interfaces;
+using Engine.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace Engine.Factory
     public class BreakerOfChains : ICustomGameObject
     {
         // Using consoleMethos instead of directly using System.Console
+        // Can easily be update to read from a text file instead
         public IConsoleMethods console;
 
         public BreakerOfChains(IConsoleMethods consoleMethods)
@@ -66,8 +68,11 @@ namespace Engine.Factory
             // and atmost one less than all of them
             else if (noOfCompetitors < Enum.GetValues(typeof(Kingdoms)).Length)
             {
+                //
+                var highPriest = new HighPriest(messagesToChoose, maxBallotRounds, console);
                 // FindRulerByBallot return false if we don't have a ruler after maxBallotRounds
-                if (!FindRulerByBallot(southeros, maxBallotRounds, messagesToChoose))
+
+                if (!highPriest.HoldBallot(southeros))
                     output += Utility.BallotTookTooLongMessage;
             }
             // If all the kingdoms compete, we can't proceed
@@ -75,113 +80,6 @@ namespace Engine.Factory
                 output += Utility.TooManyKingdomsMessage;
 
             return output;
-        }
-
-        /// <summary>
-        /// Finds the ruler of Southeros using a ballot system
-        /// </summary>
-        /// <param name="southeros"></param>
-        /// <param name="maxRounds">Maximum number of rounds the ballot can go upto in case of ties</param>
-        /// <param name="messagesToChoose">The number of messages the high priest can choose to send out</param>
-        /// <returns>Returns a boolean denoting whether a king was crowned or not</returns>
-        protected bool FindRulerByBallot(ISoutheros southeros, int maxRounds, int messagesToChoose)
-        {
-            // Verify arguments passed
-            if (messagesToChoose < 1) throw new ArgumentException(Utility.InvalidMessagesToChoose, nameof(messagesToChoose));
-
-            //Ballot round
-            int round = 0;
-
-            // The drawing from the ballot goes on until a winner is decided or we reach maxRounds
-            while (southeros.RulingKingdom == null &&
-                    ++round <= maxRounds)
-            {
-                // Randomizer to help The High Priest of Southeros choose the messages to send out
-                var rnd = new Random();
-
-                // Round up all kingdoms competing for the throne
-                var competingKingdoms = southeros.AllKingdoms.Where(kv => kv.Value.IsCompeting).Select(kv => kv.Key).ToList();
-
-                // A list to hold alliance requests from all competing kingdoms
-                var allianceRequests = new List<Message>();
-
-                // Each competing kingdom composes messages...
-                foreach (var competitor in competingKingdoms)
-                {
-                    // ...for all the other kingdoms
-                    foreach (var reciver in southeros.AllKingdoms.Keys)
-                    {
-                        // ...except itself ofcourse ¯\_(ツ)_/¯
-                        if (reciver == competitor) continue;
-                        var newRequest = new Message(competitor, reciver, Utility.listOfMessages[rnd.Next(Utility.listOfMessages.Count)]);
-                        allianceRequests.Add(newRequest);
-                    }
-                }
-
-                // In some cases the number of alliance requests might be less 
-                // than the number of messages the high priest intended to select
-                messagesToChoose = Math.Min(allianceRequests.Count, messagesToChoose);
-
-                // The High Priest of Southeros chooses the messages to send out
-                for (int i = 0; i < messagesToChoose; i++)
-                {
-                    // Randomly choose message index
-                    var messageIndex = rnd.Next(allianceRequests.Count);
-                    // Read message
-                    var message = allianceRequests.ElementAtOrDefault(messageIndex);
-                    // Send message out
-                    southeros.AllKingdoms[message.Sender].SendMessage(southeros.AllKingdoms[message.Recipient], message);
-                    // Remove message from list so that it is not sent out a second time
-                    allianceRequests.RemoveAt(messageIndex);
-                }
-
-                // Declare results
-                console.WriteLine($"Results after round {Utility.IntegerToWritten(round)} ballot count");
-
-                // Variable to store max allies by any kingdom
-                var maxAllies = 0;
-
-                foreach (var competitor in competingKingdoms)
-                {
-                    var allyCount = southeros.AllKingdoms[competitor].Allies.Count;
-
-                    console.WriteLine($"Allies for {competitor} : {allyCount}");
-
-                    maxAllies = allyCount > maxAllies ? allyCount : maxAllies;
-                }
-
-                // Find the kingdom(s) with the most allies
-                var leadingKingdoms = southeros.AllKingdoms.Where(kv => kv.Value.IsCompeting && kv.Value.Allies.Count == maxAllies);
-
-#if DEBUG
-                // Verbose output to help in Debug mode
-                console.WriteLine($"MaxAllies: {maxAllies}");
-                console.WriteLine($"Tied Kingdoms: {string.Join(", ", leadingKingdoms.Select(k => $"{k.Key} ({k.Value.Allies.Count})"))}");
-                foreach (var kv in leadingKingdoms)
-                {
-                    console.WriteLine($"Allies of {kv.Key}: {(string.Join(", ", kv.Value.Allies))}");
-                }
-#endif
-
-                // If there is a tie
-                if (leadingKingdoms.Count() > 1)
-                {
-                    // Clear the list of old competitors
-                    competingKingdoms.Clear();
-
-                    // Create a new list comprising of the kingdoms there was a tie between
-                    competingKingdoms.AddRange(leadingKingdoms.Select<KeyValuePair<Kingdoms, Kingdom>, Kingdoms>(kv => kv.Key));
-
-                    // Break all alliances
-                    foreach (var kingdom in southeros.AllKingdoms.Values) kingdom.BreakAlliances();
-                }
-                // If not...
-                else
-                    // ...we declare the winner
-                    southeros.RulingKingdom = leadingKingdoms.FirstOrDefault().Value;
-            }
-
-            return southeros.RulingKingdom != null;
         }
     }
 }

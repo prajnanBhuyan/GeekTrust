@@ -16,6 +16,8 @@ namespace Engine
 
     public class GameEngine : IGameEngine, ISoutheros
     {
+        // Using consoleMethos instead of directly using System.Console
+        // Can easily be update to read from a text file instead
         public IConsoleMethods console;
         public static readonly Dictionary<Kingdoms, string> Emblems = new Dictionary<Kingdoms, string>()
         {
