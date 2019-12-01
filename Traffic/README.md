@@ -1,4 +1,4 @@
-# Tame of Thrones :crossed_swords:
+# Traffic :car:
 My solution to the GeekTrust backend problem set, Traffic. This is a C# solution containing a single console application that reads input from text file and writes output to the console. The path to the text file needs to be provided as an argument to the console application when called.
 
 The console application was built using .NET Core 2.2 and runs on both Windows and Linux.
