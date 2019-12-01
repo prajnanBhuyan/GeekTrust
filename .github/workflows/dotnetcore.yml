@@ -1,4 +1,4 @@
-name: Set 5 Build and Test
+name: TameOfThrones Build and Test
 
 on: [push]
 
@@ -18,6 +18,6 @@ jobs:
         dotnet-version: 3.0.100
       if: matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest'
     - name: Build with dotnet
-      run: dotnet build ./Set5/src/Set5.sln --configuration Release
+      run: dotnet build ./TameOfThrones/src/Set5.sln --configuration Release
     - name: Test with dotnet
-      run: dotnet test ./Set5/src/Set5.sln --configuration Release
+      run: dotnet test ./TameOfThrones/src/Set5.sln --configuration Release

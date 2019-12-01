@@ -4,7 +4,7 @@ My solution to the GeekTrust backend problem set, Tame of Thrones. This is a C# 
 The console application was built using .NET Core 3 and runs on both Windows and Linux.
 
 ## Solution status
-[![Actions Status](https://github.com/prajnanBhuyan/GeekTrust/workflows/Set%205%20Build%20and%20Test/badge.svg)](https://github.com/prajnanBhuyan/GeekTrust/actions?query=workflow%3A%22Set+5+Build+and+Test%22)
+[![Actions Status](https://github.com/prajnanBhuyan/GeekTrust/workflows/TameOfThrones%20Build%20and%20Test/badge.svg)](https://github.com/prajnanBhuyan/GeekTrust/actions?query=workflow%3A%22TameOfThrones+Build+and+Test%22)
 
 ## Prerequisites
 
