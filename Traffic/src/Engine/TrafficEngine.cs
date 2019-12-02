@@ -27,13 +27,9 @@ namespace Engine
         /// <summary>
         /// List of available vehicles
         /// </summary>
-        /// <remarks>
-        /// Enter the vehicles on the basis of their precedence, i.e. the vehicles with 
-        /// higher precedence should come first, and will be choosen in case of a tie.
-        /// </remarks>
         public static List<Vehicle> Vehicles = new List<Vehicle>()
         {
-            new Vehicle("BIKE", 1, 10, 2, new List<Weathers>()
+            new Vehicle("BIKE", 3, 10, 2, new List<Weathers>()
             {
                 Weathers.Sunny,
                 Weathers.Windy
@@ -45,7 +41,7 @@ namespace Engine
                 Weathers.Rainy
             }),
 
-            new Vehicle("CAR", 3, 22, 3, new List<Weathers>()
+            new Vehicle("CAR", 1, 22, 3, new List<Weathers>()
             {
                 Weathers.Sunny,
                 Weathers.Rainy,

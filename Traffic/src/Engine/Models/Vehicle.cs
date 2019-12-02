@@ -27,7 +27,7 @@ namespace Engine.Models
         public readonly string Name;
 
         /// <summary>
-        /// Precedence of the vehicle, lower the number, higher the priority
+        /// Precedence of the vehicle, higher the number, higher the priority
         /// </summary>
         public readonly int Precedence;
 
@@ -35,7 +35,7 @@ namespace Engine.Models
         /// Represents a type of vehicle
         /// </summary>
         /// <param name="name">Name of the vehicle</param>
-        /// <param name="precedence">Precedence of the vehicle, lower the number, higher the priority</param>
+        /// <param name="precedence">Precedence of the vehicle, higher the number, higher the priority</param>
         /// <param name="speed">Speed of the vehicle in megamiles per hour (mm/hr)</param>
         /// <param name="timePerCrater">Time required by the vehicle to cross a crater in minutes (min)</param>
         /// <param name="suitableWeathers">Weathers the vehicle can travel in</param>
@@ -84,10 +84,10 @@ namespace Engine.Models
         /// Returns a boolean representing if the current vehicle has a higher priority
         /// </summary>
         /// <param name="competingVehicle">The vehicle to compare current vehicle's priority against</param>
-        /// <returns></returns>
+        /// <returns>Boolen denoting if the current vehicle should be choosen in case of a tie</returns>
         public bool HasPrecedenceOver(Vehicle competingVehicle)
         {
-            return Precedence < competingVehicle.Precedence;
+            return Precedence > competingVehicle.Precedence;
         }
     }
 }
