@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Engine.Models
 {
-    class Orbit
+    public class Orbit
     {
+        /// <summary>
+        /// Name of the orbit
+        /// </summary>
+        public readonly string Name;
+
         /// <summary>
         /// The distance between Silk Dorb and Lengaburu in megamiles (mm)
         /// </summary>
@@ -27,14 +32,18 @@ namespace Engine.Models
         /// <param name="distance">The distance between Silk Dorb and Lengaburu in megamiles (mm)</param>
         /// <param name="craters">The number of craters in the route</param>
         /// <exception cref="ArgumentException"></exception>
-        public Orbit(decimal distance, int craters)
+        public Orbit(string name, decimal distance, int craters)
         {
-            if (distance <= 0)
-                throw new ArgumentException($"{nameof(distance)} cannot be zero or negative", nameof(distance));
-            Distance = distance;
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException($"{nameof(name)} cannot be null or whitespace", nameof(name));
+            Name = name;
 
             if (distance <= 0)
-                throw new ArgumentException($"{nameof(craters)} cannot be negative", nameof(craters));
+                throw new ArgumentOutOfRangeException(nameof(distance), distance, $"{nameof(distance)} cannot be zero or negative");
+            Distance = distance;
+
+            if (craters < 0)
+                throw new ArgumentOutOfRangeException(nameof(craters), craters, $"{nameof(craters)} cannot be negative");
             Craters = craters;
         }
 
@@ -47,13 +56,17 @@ namespace Engine.Models
         {
             // We use floor because 10% increase in 15 craters would be 16.5 craters
             // but that is not possible in the real world. So we select 16 instead.
-            Craters *= (int)Math.Floor(1M + (weather.ChangeInCraters / 100));
+            Craters = (int)Math.Floor(Craters * (1M + (weather.ChangeInCraters / 100)));
         }
 
+        /// <summary>
+        /// Sets the speed of the traffic on the orbital route
+        /// </summary>
+        /// <param name="speedOfTraffic">The speed passed in by the user as an argument</param>
         public void SetTrafficSpeed(decimal speedOfTraffic)
         {
             if (speedOfTraffic < 0)
-                throw new ArgumentException($"{nameof(speedOfTraffic)} cannot be negative", nameof(speedOfTraffic));
+                throw new ArgumentOutOfRangeException(nameof(speedOfTraffic), speedOfTraffic, $"{nameof(speedOfTraffic)} cannot be negative");
             SpeedOfTraffic = speedOfTraffic;
         }
     }
