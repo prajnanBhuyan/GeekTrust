@@ -56,11 +56,34 @@ namespace Traffic.Tests
             TrafficEngine.Vehicles.Add(higherPrecedenceVehicle);
 
             var testTrafficEngine = new TrafficEngine(testWeather, testTrafficSpeeds);
+            var actual = testTrafficEngine.FindFastestRouteAndVehicle();
 
             // restore
             TrafficEngine.Vehicles = backup;
 
+
+            Assert.That(string.Compare(expected, actual, StringComparison.InvariantCultureIgnoreCase) == 0);
+        }
+
+        [Test, Category("TrafficEngineTest")]
+        [Description("Tests that in case of complete traffic jam, traffic speed 0 on both orbits, no vehicle or orbit is selected")]
+        public void When_TrafficJam_Expect_NoVehicleAndRoute()
+        {
+            var testWeather = "SUNNY";
+            var testTrafficSpeeds = new string[] { "0", "0" };
+            var onlyVehicle = new Vehicle("OnlyVehicle", 0, 10, 1, new List<Weathers>() { Weathers.Sunny });
+            var expected = $"No Vehicle No Orbit";
+
+            var backup = TrafficEngine.Vehicles;
+
+            TrafficEngine.Vehicles.Clear();
+            TrafficEngine.Vehicles.Add(onlyVehicle);
+
+            var testTrafficEngine = new TrafficEngine(testWeather, testTrafficSpeeds);
             var actual = testTrafficEngine.FindFastestRouteAndVehicle();
+
+            // restore
+            TrafficEngine.Vehicles = backup;
 
             Assert.That(string.Compare(expected, actual, StringComparison.InvariantCultureIgnoreCase) == 0);
         }

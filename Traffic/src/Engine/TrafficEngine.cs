@@ -137,7 +137,7 @@ namespace Engine
                 }
             }
 
-            return $"{fastestVehicle.Name} {fastestOrbit.Name}";
+            return $"{fastestVehicle?.Name ?? "No Vehicle"} {fastestOrbit?.Name ?? "No Orbit"}";
         }
     }
 
