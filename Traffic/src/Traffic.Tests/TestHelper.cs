@@ -1,7 +1,4 @@
 ﻿using Engine.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Traffic.Tests
 {

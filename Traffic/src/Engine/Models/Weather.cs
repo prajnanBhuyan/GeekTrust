@@ -1,9 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Engine.Models
 {
+    /// <summary>
+    /// A structure to hold all weather realted information
+    /// </summary>
+    /// <remarks>
+    /// I decided to use a struct so that we can easily extend the changes due 
+    /// to weather without updating any other portion of the code. For now, we
+    /// only have a percentage of ChangeInCraters. We can easily add other weather
+    /// affects (ex: Increase in traffic during a rainy day) to this struct and 
+    /// easily use them in any behaviour already dependant on weather conditions
+    /// </remarks>
     public struct Weather
     {
         /// <summary>

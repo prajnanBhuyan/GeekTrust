@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Engine.Models
 {
@@ -63,6 +61,7 @@ namespace Engine.Models
         /// Sets the speed of the traffic on the orbital route
         /// </summary>
         /// <param name="speedOfTraffic">The speed passed in by the user as an argument</param>
+        /// <exception cref="ArgumentOutOfRangeException">If speedOfTraffic is negative</exception>
         public void SetTrafficSpeed(decimal speedOfTraffic)
         {
             if (speedOfTraffic < 0)
