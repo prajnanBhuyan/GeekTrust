@@ -14,7 +14,7 @@ You need to have [.NET Core v3.0.0](https://dotnet.microsoft.com/download/dotnet
 |-----------|-------------------------------|
 | Linux	    |[Package manager instructions] |
 | Windows	|[x64] / [x86]	                |
-| All       |[dotnet-install scripts]       
+| All       |[dotnet-install scripts]       |
 
 
 
@@ -197,8 +197,8 @@ Space
 
 
 
-[build_ubuntu]: https://github.com/prajnanBhuyan/GeekTrust/blob/master/Set5/build.sh
-[build_windows]: https://github.com/prajnanBhuyan/GeekTrust/blob/master/Set5/build.ps1
+[build_ubuntu]: https://github.com/prajnanBhuyan/GeekTrust/blob/master/TameOfThrones/build.sh
+[build_windows]: https://github.com/prajnanBhuyan/GeekTrust/blob/master/TameOfThrones/build.ps1
 [x64]: https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.0.101-windows-x64-installer
 [x86]: https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.0.101-windows-x86-installer
 [Package manager instructions]: https://dotnet.microsoft.com/download/linux-package-manager/sdk-3.0.101

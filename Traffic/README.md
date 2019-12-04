@@ -33,7 +33,7 @@ Run ```dotnet test --help``` for more information.
 
 ## Running the Application
 
-After running one of the build scripts you can head to the _Published_ directory to run the application. The console application expects the user to enter which problem they wish to run as a parameter. The valid values are **Problem1** and **Problem2** (case-insensitive)
+After running one of the build scripts you can head to the _Published_ directory to run the application. The console application expects the user to enter the absolute path to the input file as a parameter.
 
 ### Windows
 
